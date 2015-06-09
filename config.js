@@ -25,6 +25,7 @@ System.config({
     "babel": "npm:babel-core@5.4.7",
     "babel-runtime": "npm:babel-runtime@5.4.7",
     "bootstrap": "github:twbs/bootstrap@3.3.4",
+    "codemirror": "npm:codemirror@5.3.0",
     "core-js": "npm:core-js@0.9.15",
     "css": "github:systemjs/plugin-css@0.1.11",
     "font-awesome": "npm:font-awesome@4.3.0",
@@ -205,6 +206,10 @@ System.config({
       "source-map": "npm:source-map@0.1.43",
       "url": "github:jspm/nodelibs-url@0.1.0",
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:codemirror@5.3.0": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:commander@2.6.0": {
       "child_process": "github:jspm/nodelibs-child_process@0.1.0",
