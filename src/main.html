@@ -1,6 +1,12 @@
 <template>
+  <require from='./cmeditor'></require>
   <section class="au-animate">
-    <require from='./cmeditor'></require>
-    <cmeditor />
+    <div class="cm-less">
+      <cmeditor />
+    </div>
+    <div class="cm-css">
+      <cmeditor readonly="true" />
+    </div>
   </section>
+
 </template>
