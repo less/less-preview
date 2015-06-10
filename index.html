@@ -15,7 +15,13 @@
     <script src="jspm_packages/system.js"></script>
     <script src="config.js"></script>
     <script>
-      System.import('aurelia-bootstrapper');
+      // Loads WeakMap polyfill needed by MutationObservers
+      System.import('core-js').then( function() {
+        // Imports MutationObserver polyfill
+        System.import('polymer/mutationobservers').then( function() {
+          System.import('aurelia-bootstrapper');
+        });
+      });
     </script>
   </body>
 </html>
