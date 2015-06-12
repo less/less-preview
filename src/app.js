@@ -1,5 +1,4 @@
-//import 'bootstrap';
-//import 'bootstrap/css/bootstrap.css!';
+import 'bootstrap';
 
 export class App {
   configureRouter(config, router){

@@ -1,5 +1,201 @@
+@import (inline) "../jspm_packages/npm/codemirror@5.3.0/lib/codemirror.css";
+@import (inline) "../jspm_packages/npm/codemirror@5.3.0/theme/cobalt.css";
+@import (inline) "../jspm_packages/github/twbs/bootstrap@3.3.4/css/bootstrap.css";
+
+body {
+  padding-top: 43px;
+  background-color: #dadada;
+  background-image: linear-gradient(to bottom, #eee, #bbb);
+  background-repeat: repeat-x;
+}
+
 .CodeMirror {
-  width: 400px;
+  height:100%;
+}
+
+@codeMirrorBg : hsl(0, 0%, 15%);
+.cm-s-lesser-dark {
+  &.CodeMirror {
+    background: @codeMirrorBg;
+    color: hsl(90, 20%, 92%);
+    text-shadow: 0 -1px 1px @codeMirrorBg;
+    font-size: 12px;
+    line-height: 1.4;
+    border-radius: 3px;
+  }
+
+  pre { padding: 0 8px; } // editable code holder
+
+  &.CodeMirror span.CodeMirror-matchingbracket { color: hsl(120, 95%, 74%); }
+
+  div.CodeMirror-selected { background: hsl(54, 8%, 25%) !important; }
+  pre { padding: 0 8px; } /*editable code holder*/
+  .CodeMirror-cursor { border-left: 1px solid white !important; }
+
+  .CodeMirror-gutters {
+    padding-right: 1px;
+    border-right: 1px solid hsl(0, 0%, 20%);
+
+    background: @codeMirrorBg;
+  }
+
+  .CodeMirror-linenumber { color: hsl(0, 0%, 47%); }
+
+  span {
+    &.cm-tag        { color : hsl( 189,  20%,   50% ) }
+    &.cm-qualifier  { color : hsl( 189,  20%,   50% ) }
+    &.cm-meta       { color : hsl( 120,  10%,   50% ) }
+    &.cm-number     { color : hsl( 10,   40%,   50% ) }
+    &.cm-string     { color : hsl( 75,   50%,   65% ) }
+    &.cm-comment    { color : hsl( 0,    0%,    40% ) }
+    &.cm-keyword    { color : hsl( 215,  100%,  67% ) }
+    &.cm-variable   { color : hsl( 40,   50%,   70% ) }
+
+    &.cm-hr         { color : hsl( 0,    0%,    60%  ) }
+    &.cm-def        { color : hsl( 0,    0%,    100% ) }
+    &.cm-atom       { color : hsl( 50,   40%,   60%  ) }
+    &.cm-link       { color : hsl( 240,  100%,  40%  ) }
+    &.cm-error      { color : hsl( 4,    76%,   35%  ) }
+    &.cm-quote      { color : hsl( 120,  100%,  30%  ) }
+    &.cm-header     { color : hsl( 300,  100%,  33%  ) }
+    &.cm-builtin    { color : hsl( 25,   100%,  67%  ) }
+    &.cm-bracket    { color : hsl( 90,   20%,   92%  ) }
+    &.cm-property   { color : hsl( 77,   30%,   51%  ) }
+    &.cm-operator   { color : hsl( 77,   30%,   51%  ) }
+    &.cm-string-2   { color : hsl( 20,   100%,  50%  ) }
+    &.cm-attribute  { color : hsl( 240,  100%,  40%  ) }
+    &.cm-variable-2 { color : hsl( 189,  20%,   50%  ) }
+    &.cm-variable-3 { color : hsl( 0,    0%,    100% ) }
+  }
+}
+
+.error .CodeMirror-lines pre {
+  color: rgb(199, 0, 56) !important;
+
+  div,
+  span { color: rgb(199, 0, 56) !important; }
+}
+
+.code-wrap {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  bottom: 100px;
+  left: 20px;
+  padding: 8px;
+  width: 47.5%;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.code-wrap.right {
+  left: auto;
+  right: 20px;
+}
+
+h2.code-label {
+   position: absolute;
+   margin: 0;
+   right: 25px;
+   top: 15px;
+   z-index: 1;
+   font-size: 20px;
+   color: #ccc;
+   text-shadow: -2px 2px 2px rgba(0,0,0,0.7),-1px 1px 7px rgba(0,0,0,0.2);
+}
+
+.page-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  padding: 15px 20px;
+  width: 100%;
+  border-top: 1px solid #999;
+  color: #555;
+  background-color: #d3d3d3;
+  background-image: linear-gradient(to bottom, #eee, #aaa);
+  background-repeat: repeat-x;
+  text-shadow: 0 1px #fff;
+  box-shadow: 0 -5px 12px hsla(0, 0%, 0%, 0.15), inset 0 1px 0 hsla(0, 0%, 100%, 0.1);
+  box-sizing: border-box;
+
+  & > p {
+    margin: 0;
+  }
+  a {
+    color: black;
+  }
+}
+
+.navbar {
+  height: 42px;
+  min-height: 42px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1030;
+  border-bottom: 1px solid #999;
+  width: 100%;
+  box-shadow: 0 1px 10px hsla(0, 0%, 0%, 0.2), inset 0 1px 0 white;
+  background-color: #dadada;
+  background-image: linear-gradient(to bottom, #efefef, #bbb);
+  background-repeat: repeat-x;
+
+  &, & * {
+    box-sizing: border-box;
+  }
+
+  .nav {
+    white-space: nowrap;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+
+    & > li {
+      display: inline-block;
+      line-height: 1;
+      padding: 0;
+      height: 42px;
+      vertical-align: top;
+
+      & > a, & > span {
+        padding: 0 20px;
+        line-height: 42px;
+        display: inline-block;
+        color: #4f4f4f;
+        text-shadow: 0 1px 1px rgba(255,255,255,0.7);
+        transition: all .2s;
+      }
+
+      &.brand {
+        font-size: 20px;
+        font-weight: 200;
+        text-shadow: 0 1px 0 #fff;
+      }
+
+      &.divider-vertical {
+        border-left: 1px solid #a0a0a0;
+        border-right: 1px solid #eee;
+      }
+
+      &.option-info > span {
+        cursor: default;
+        font-size: 12px;
+        color: #4f4f4f;
+        padding-left: 10px;
+        padding-right: 0;
+      }
+    }
+  }
+}
+
+.less-options {
+  position: relative;
+  z-index: 1;
+  transition: all .5s;
 }
 
 /* Animations */

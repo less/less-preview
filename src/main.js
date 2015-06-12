@@ -3,7 +3,8 @@ import less from './less';
 export class Main {
   constructor() {
     const lessVersions = less.getVersions();
-    less.loadVersion(lessVersions[lessVersions.length - 1]);
+    this.lessVersion = lessVersions[lessVersions.length - 1];
+    less.loadVersion(this.lessVersion);
   }
   get lessSrc() {
     return this._lessSrc;
