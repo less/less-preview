@@ -1,5 +1,33 @@
 <template>
-  <div class="page-host">
-    <router-view></router-view>
+  <require from='./cmeditor'></require>
+
+  <div class="navbar navbar-fixed-top"><div class="navbar-inner">
+    <ul class="nav">
+      <li class="brand"><a href="/">LESS2CSS</a></li>
+      <li class="divider-vertical"></li>
+      <li class="less-options"><a href="#" ng-click="toggleDrawer($event)">Options</a></li>
+      <li class="divider-vertical"></li>
+      <li class="option-info"><span>LESS Version:&nbsp;<code class="">${lessVersion}</code></span></li>
+    </ul>
+  </div></div>
+
+    <div class="au-animate main">
+      <div class="cm-less">
+        <div class="code-wrap left">
+          <h2 class="code-label left">LESS</h2>
+          <cmeditor value.two-way="lessSrc" />
+        </div>
+      </div>
+      <div class="cm-css">
+        <div class="code-wrap right">
+          <h2 class="code-label right">CSS</h2>
+          <cmeditor readonly="true" value.bind="css" />
+        </div>
+      </div>
   </div>
+  <footer class="page-footer">
+    <p>
+      &#169; 2015 Luke Page, Brian Frichette &amp; Contributors. License&nbsp;<a href="http://opensource.org/licenses/MIT" target="_blank">MIT</a>.</p>
+    <p class="small">Special thanks for the Open Source technologies that made building this site a pleasure:&nbsp;<a href="http://lesscss.org/" target="_blank">LESS</a>,&nbsp;<a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>,&nbsp;<a href="http://codemirror.net/" target="_blank">CodeMirror</a>,&nbsp;<a href="http://http://aurelia.io/" target="_blank">Aurelia</a>.</p></footer>
+
 </template>

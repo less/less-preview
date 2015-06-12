@@ -1,12 +1,20 @@
+import less from './less';
 import 'bootstrap';
 
-export class App {
-  configureRouter(config, router){
-    config.title = 'less2css';
-    config.map([
-      { route: [''],  moduleId: './main',      nav: true, title:'' }
-    ]);
-
-    this.router = router;
+export class Main {
+  constructor() {
+    const lessVersions = less.getVersions();
+    this.lessVersion = lessVersions[lessVersions.length - 1];
+    less.loadVersion(this.lessVersion);
+  }
+  get lessSrc() {
+    return this._lessSrc;
+  }
+  set lessSrc(value) {
+    this._lessSrc = value;
+    less.convert(value)
+      .then((cssResp) => {
+        this.css = cssResp.css;
+      });
   }
 }
