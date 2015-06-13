@@ -1,5 +1,5 @@
 import less from './less';
-import 'bootstrap';
+//import 'bootstrap';
 import defaultLessSrc from './default-less-src';
 
 export class App {
