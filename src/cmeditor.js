@@ -16,6 +16,7 @@ export class cmeditor {
       theme: "lesser-dark",
       readOnly: this.readonly
     });
+    this.codeMirror.setValue(this.value || "");
     this.codeMirror.on('change', (codeMirror, changeObj) => {
       const newValue = codeMirror.getValue();
       if (newValue !== this.value) {

@@ -5,15 +5,22 @@ class less {
     return lessVersions;
   }
   loadVersion(version) {
-    const url = `//cdnjs.cloudflare.com/ajax/libs/less.js/${version}/less.min.js`;
-    const scriptTag = document.createElement("script");
-    scriptTag.src = url;
+    this.lessPromise = new Promise((resolve, reject) => {
 
-    delete window.less;
-    document.head.appendChild(scriptTag);
+      const url = `//cdnjs.cloudflare.com/ajax/libs/less.js/${version}/less.min.js`;
+      delete window.less;
+
+      $.getScript( url, function( data, textStatus, jqxhr ) {
+        resolve(window.less);
+      });
+    });
+    return this.lessPromise;
   }
   convert(lessSrc) {
-    return window.less.render(lessSrc);
+    return this.lessPromise
+      .then((less) => {
+        return less.render(lessSrc);
+      });
   }
 }
 
