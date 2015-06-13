@@ -153,8 +153,10 @@ h2.code-label {
     overflow: hidden;
     list-style: none;
     margin: 0;
+    font-size: 0;
 
     & > li {
+      font-size: 14px;
       display: inline-block;
       line-height: 1;
       padding: 0;
@@ -190,6 +192,11 @@ h2.code-label {
       }
     }
   }
+}
+
+.options-drawer {
+  position:fixed;
+  z-index: 2000;
 }
 
 .less-options {

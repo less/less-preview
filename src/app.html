@@ -1,29 +1,32 @@
 <template>
-  <require from='./cmeditor'></require>
-
   <div class="navbar navbar-fixed-top"><div class="navbar-inner">
     <ul class="nav">
       <li class="brand"><a href="/">LESS2CSS</a></li>
       <li class="divider-vertical"></li>
-      <li class="less-options"><a href="#" ng-click="toggleDrawer($event)">Options</a></li>
+      <li class="${isDrawerOpen ? 'active' : ''} less-options"><a href="javascript:void 0" click.delegate="openDraw()">Options</a></li>
       <li class="divider-vertical"></li>
       <li class="option-info"><span>LESS Version:&nbsp;<code class="">${lessVersion}</code></span></li>
     </ul>
   </div></div>
 
-    <div class="au-animate main">
-      <div class="cm-less">
-        <div class="code-wrap left">
+  <require from='./options-draw'></require>
+  <options-draw visible.bind="isDrawerOpen"></options-draw>
+
+  <require from='./cmeditor'></require>
+
+  <div class="au-animate main">
+    <div class="cm-less">
+      <div class="code-wrap left">
           <h2 class="code-label left">LESS</h2>
           <cmeditor value.two-way="lessSrc" />
-        </div>
       </div>
-      <div class="cm-css">
-        <div class="code-wrap right">
-          <h2 class="code-label right">CSS</h2>
-          <cmeditor readonly="true" value.bind="css" />
-        </div>
+    </div>
+     <div class="cm-css">
+      <div class="code-wrap right">
+        <h2 class="code-label right">CSS</h2>
+        <cmeditor readonly="true" value.bind="css" />
       </div>
+    </div>
   </div>
   <footer class="page-footer">
     <p>

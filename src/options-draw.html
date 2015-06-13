@@ -1,0 +1,43 @@
+<template>
+  <section class="options-drawer" css="opacity: ${visible ? '1' : '0'}; top: ${visible ? '40px' : '0px'}; display: ${visible ? 'block' : 'none'}">
+    <article class="options-drawer-wrap">
+      <div class="row-fluid options-row first-row ng-scope">
+        <div class="span3 option-column">
+          <label for="less-version">LESS Version</label>
+          <select id="less-version" ng-model="opts.selectedVersion" ng-options="version.number as version.label for version in opts.versions" class="less-version ng-pristine ng-valid">
+            <option value="0" selected="selected">1.7.5</option>
+            <option value="1">1.7.4</option>
+          </select>
+        </div>
+        <div class="span3 option-column">
+          <label>Output Line Numbers</label>
+          <button ng-class="{'btn-primary': opts.lineNumbersEnabled}" ng-click="toggleOption('lineNumbersEnabled')" ng-bind="toggleTxt('lineNumbersEnabled')" class="btn span12 toggle-btn ng-binding">Disabled</button>
+          <select ng-show="opts.lineNumbersEnabled" ng-disabled="!opts.lineNumbersEnabled" ng-model="opts.lineNumbers" ng-options="opt.value as opt.label for opt in opts.lineNumberOptions" class="ng-pristine ng-valid" disabled="disabled" style="display: none;">
+            <option value="0" selected="selected">Comments</option>
+            <option value="1">Media Query</option>
+            <option value="2">All</option>
+          </select>
+        </div>
+        <div class="span3 option-column">
+          <label>Relative URLs</label>
+          <button ng-class="{'btn-primary': opts.relativeUrls }" ng-click="toggleOption('relativeUrls')" ng-bind="toggleTxt('relativeUrls')" class="btn span12 toggle-btn ng-binding">Disabled</button>
+        </div>
+        <div class="span3 option-column">
+          <label>Change Rootpath</label>
+          <button ng-class="{'btn-primary': opts.rootPathEnabled }" ng-click="toggleOption('rootPathEnabled')" ng-bind="toggleTxt('rootPathEnabled')" class="btn span12 toggle-btn ng-binding">Disabled</button>
+          <input ng-show="opts.rootPathEnabled" ng-disabled="!opts.rootPathEnabled" ng-model="opts.rootpathText" placeholder="Enter rootpath" type="text" class="ng-pristine ng-valid" disabled="disabled" style="display: none;">
+        </div>
+      </div>
+      <div class="row-fluid options-row last-row ng-scope">
+        <div ng-hide="isLegacy()" class="span3 option-column">
+          <label>Strict Math</label>
+          <button ng-class="{'btn-primary': opts.strictMath}" ng-click="toggleOption('strictMath')" ng-bind="toggleTxt('strictMath')" ng-disabled="isLegacy()" class="btn span12 toggle-btn ng-binding">Disabled</button>
+        </div>
+        <div ng-hide="isLegacy()" class="span3 option-column">
+          <label>Strict Units</label>
+          <button ng-class="{'btn-primary': opts.strictUnits}" ng-click="toggleOption('strictUnits')" ng-bind="toggleTxt('strictUnits')" ng-disabled="isLegacy()" class="btn span12 toggle-btn ng-binding">Disabled</button>
+        </div>
+      </div>
+    </article>
+  </section>
+</template>

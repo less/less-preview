@@ -1,5 +1,4 @@
 import less from './less';
-//import 'bootstrap';
 import defaultLessSrc from './default-less-src';
 
 export class App {
@@ -21,6 +20,9 @@ export class App {
     if (!loadedFromHash) {
       this.lessSrc = defaultLessSrc;
     }
+  }
+  openDraw() {
+    this.isDrawerOpen = !this.isDrawerOpen;
   }
   get lessSrc() {
     return this._lessSrc;
