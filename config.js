@@ -17,12 +17,12 @@ System.config({
 System.config({
   "map": {
     "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.8.1",
+    "aurelia-event-aggregator": "github:aurelia/event-aggregator@0.5.0",
     "aurelia-framework": "github:aurelia/framework@0.12.0",
-    "aurelia-logging-console": "github:aurelia/logging-console@0.5.0",
     "aurelia-loader-default": "github:aurelia/loader-default@0.8.0",
+    "aurelia-logging-console": "github:aurelia/logging-console@0.5.0",
     "aurelia-templating-binding": "github:aurelia/templating-binding@0.12.0",
     "aurelia-templating-resources": "github:aurelia/templating-resources@0.12.0",
-    "aurelia-event-aggregator": "github:aurelia/event-aggregator@0.5.0",
     "babel": "npm:babel-core@5.4.7",
     "babel-runtime": "npm:babel-runtime@5.4.7",
     "bootstrap": "github:twbs/bootstrap@3.3.4",
