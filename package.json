@@ -57,6 +57,7 @@
       "aurelia-templating-binding": "github:aurelia/templating-binding@^0.12.0",
       "aurelia-templating-resources": "github:aurelia/templating-resources@^0.12.0",
       "bootstrap": "github:twbs/bootstrap@3.3.4",
+      "jquery": "github:components/jquery@2.1.4",
       "codemirror": "npm:codemirror@5.3.0",
       "polymer/mutationobservers": "github:polymer/mutationobservers@0.4.2"
     },

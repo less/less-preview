@@ -30,6 +30,7 @@ System.config({
     "core-js": "npm:core-js@0.9.15",
     "css": "github:systemjs/plugin-css@0.1.11",
     "font-awesome": "npm:font-awesome@4.3.0",
+    "jquery": "github:components/jquery@2.1.4",
     "polymer/mutationobservers": "github:polymer/mutationobservers@0.4.2",
     "github:aurelia/binding@0.7.0": {
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.8.1",

@@ -1,4 +1,5 @@
 import lessVersions from 'less-versions';
+import 'jquery';
 
 class less {
   getVersions() {
