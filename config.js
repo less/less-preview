@@ -30,7 +30,6 @@ System.config({
     "core-js": "npm:core-js@0.9.15",
     "css": "github:systemjs/plugin-css@0.1.11",
     "font-awesome": "npm:font-awesome@4.3.0",
-    "jquery": "github:components/jquery@2.1.4",
     "polymer/mutationobservers": "github:polymer/mutationobservers@0.4.2",
     "github:aurelia/binding@0.7.0": {
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.8.1",
@@ -139,9 +138,6 @@ System.config({
       "clean-css": "npm:clean-css@3.1.9",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "path": "github:jspm/nodelibs-path@0.1.0"
-    },
-    "github:twbs/bootstrap@3.3.4": {
-      "jquery": "github:components/jquery@2.1.4"
     },
     "npm:amdefine@0.1.0": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
