@@ -1,20 +1,14 @@
 import lessVersions from 'less-versions';
-import 'jquery';
+import insertScript from 'insert-script';
 
 class less {
   getVersions() {
     return lessVersions;
   }
   loadVersion(version) {
-    this.lessPromise = new Promise((resolve, reject) => {
-
-      const url = `//cdnjs.cloudflare.com/ajax/libs/less.js/${version}/less.min.js`;
-      delete window.less;
-
-      $.getScript( url, function( data, textStatus, jqxhr ) {
-        resolve(window.less);
-      });
-    });
+    delete window.less;
+    this.lessPromise = insertScript(`//cdnjs.cloudflare.com/ajax/libs/less.js/${version}/less.min.js`)
+      .then(() => window.less);
     return this.lessPromise;
   }
   convert(lessSrc) {
