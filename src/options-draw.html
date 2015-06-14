@@ -4,9 +4,8 @@
       <div class="row-fluid options-row first-row">
         <div class="col-sm-3 option-column">
           <label for="less-version" class="control-label">LESS Version</label>
-          <select id="less-version" class="less-version form-control">
-            <option value="0" selected="selected">1.7.5</option>
-            <option value="1">1.7.4</option>
+          <select id="less-version" class="less-version form-control" value.two-way="selectedLessVersion">
+            <option repeat.for="version of lessVersions" value.bind="version">${version}</option>
           </select>
         </div>
         <div class="col-sm-3 option-column">
