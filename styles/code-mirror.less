@@ -1,0 +1,66 @@
+.CodeMirror {
+  height:100%;
+}
+
+@codeMirrorBg : hsl(0, 0%, 15%);
+.cm-s-lesser-dark {
+  &.CodeMirror {
+    background: @codeMirrorBg;
+    color: hsl(90, 20%, 92%);
+    text-shadow: 0 -1px 1px @codeMirrorBg;
+    font-size: 12px;
+    line-height: 1.4;
+    border-radius: 3px;
+  }
+
+  pre { padding: 0 8px; } // editable code holder
+
+  &.CodeMirror span.CodeMirror-matchingbracket { color: hsl(120, 95%, 74%); }
+
+  div.CodeMirror-selected { background: hsl(54, 8%, 25%) !important; }
+  pre { padding: 0 8px; } /*editable code holder*/
+  .CodeMirror-cursor { border-left: 1px solid white !important; }
+
+  .CodeMirror-gutters {
+    padding-right: 1px;
+    border-right: 1px solid hsl(0, 0%, 20%);
+
+    background: @codeMirrorBg;
+  }
+
+  .CodeMirror-linenumber { color: hsl(0, 0%, 47%); }
+
+  span {
+    &.cm-tag        { color : hsl( 189,  20%,   50% ) }
+    &.cm-qualifier  { color : hsl( 189,  20%,   50% ) }
+    &.cm-meta       { color : hsl( 120,  10%,   50% ) }
+    &.cm-number     { color : hsl( 10,   40%,   50% ) }
+    &.cm-string     { color : hsl( 75,   50%,   65% ) }
+    &.cm-comment    { color : hsl( 0,    0%,    40% ) }
+    &.cm-keyword    { color : hsl( 215,  100%,  67% ) }
+    &.cm-variable   { color : hsl( 40,   50%,   70% ) }
+
+    &.cm-hr         { color : hsl( 0,    0%,    60%  ) }
+    &.cm-def        { color : hsl( 0,    0%,    100% ) }
+    &.cm-atom       { color : hsl( 50,   40%,   60%  ) }
+    &.cm-link       { color : hsl( 240,  100%,  40%  ) }
+    &.cm-error      { color : hsl( 4,    76%,   35%  ) }
+    &.cm-quote      { color : hsl( 120,  100%,  30%  ) }
+    &.cm-header     { color : hsl( 300,  100%,  33%  ) }
+    &.cm-builtin    { color : hsl( 25,   100%,  67%  ) }
+    &.cm-bracket    { color : hsl( 90,   20%,   92%  ) }
+    &.cm-property   { color : hsl( 77,   30%,   51%  ) }
+    &.cm-operator   { color : hsl( 77,   30%,   51%  ) }
+    &.cm-string-2   { color : hsl( 20,   100%,  50%  ) }
+    &.cm-attribute  { color : hsl( 240,  100%,  40%  ) }
+    &.cm-variable-2 { color : hsl( 189,  20%,   50%  ) }
+    &.cm-variable-3 { color : hsl( 0,    0%,    100% ) }
+  }
+}
+
+.error .CodeMirror-lines pre {
+  color: rgb(199, 0, 56) !important;
+
+  div,
+  span { color: rgb(199, 0, 56) !important; }
+}
