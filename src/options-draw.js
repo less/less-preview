@@ -1,12 +1,12 @@
 import {customElement, bindable} from 'aurelia-framework';
 import less from './less';
+import lessOptions from './less-options';
 
 @customElement("options-draw")
 export class optionsDraw {
   @bindable visible;
   constructor() {
     this.lessVersions = less.getVersions();
-    this._selectedLessVersion = this.lessVersions[this.lessVersions.length - 1];
   }
   attached() {
   }
@@ -20,10 +20,9 @@ export class optionsDraw {
     }
   }
   get selectedLessVersion() {
-    return this._selectedLessVersion;
+    return lessOptions.version;
   }
   set selectedLessVersion(newVersion) {
     less.loadVersion(newVersion);
-    this._selectedLessVersion = newVersion;
   }
 }

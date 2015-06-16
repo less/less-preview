@@ -1,11 +1,15 @@
 import less from './less';
+import lessOptions from './less-options';
 import defaultLessSrc from './default-less-src';
 
 export class App {
   constructor() {
     const lessVersions = less.getVersions();
-    this.lessVersion = lessVersions[lessVersions.length - 1];
-    less.loadVersion(this.lessVersion);
+    const lessVersion = lessVersions[lessVersions.length - 1];
+    less.loadVersion(lessVersion);
+
+    this.lessOptions = lessOptions;
+
     const hash = decodeURIComponent(window.location.hash.replace(/^#/, ""));
     let loadedFromHash = false;
     if (hash) {

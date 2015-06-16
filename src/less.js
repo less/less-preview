@@ -1,4 +1,5 @@
 import lessVersions from 'less-versions';
+import lessOptions from 'less-options';
 import insertScript from 'insert-script';
 
 class less {
@@ -7,6 +8,7 @@ class less {
   }
   loadVersion(version) {
     delete window.less;
+    lessOptions.version = version;
     this.lessPromise = insertScript(`//cdnjs.cloudflare.com/ajax/libs/less.js/${version}/less.min.js`)
       .then(() => window.less);
     return this.lessPromise;
