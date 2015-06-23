@@ -5,6 +5,16 @@ var vinylPaths = require('vinyl-paths');
 
 // deletes all files in the output path
 gulp.task('clean', function() {
-  return gulp.src([paths.output, paths.bundleOutput])
+  return gulp.src([paths.output])
+    .pipe(vinylPaths(del));
+});
+
+gulp.task('clean-bundle', function() {
+  return gulp.src([paths.bundleOutput])
+    .pipe(vinylPaths(del));
+});
+
+gulp.task('clean-jspm-packages', function() {
+  return gulp.src(['./jspm_packages'])
     .pipe(vinylPaths(del));
 });
