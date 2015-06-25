@@ -12,8 +12,10 @@ aurelia.command('bundle', {
         "aurelia-logging-console",
         "aurelia-templating-binding",
         "aurelia-templating-resources",
+        "aurelia-html-template-element",
         "codemirror",
-        "polymer/mutationobservers"
+        "polymer/mutationobservers",
+        "github:webcomponents/webcomponentsjs@0.6.3/HTMLImports.min",
       ],
       options: {
         inject: true,
