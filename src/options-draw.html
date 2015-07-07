@@ -8,7 +8,7 @@
             <option repeat.for="version of lessVersions" value.bind="version">${version}</option>
           </select>
         </div>
-        <div class="col-sm-3 option-column">
+        <div class="col-sm-3 option-column" show.bind="outputLineNumbersAvailable">
           <label class="control-label">Output Line Numbers</label>
           <button class="btn btn-default col-sm-12" click.delegate="toggleOutputLineNumbers();">${ outputLineNumbers ? "Enabled" : "Disabled" }</button>
           <select class="form-control" show.bind="outputLineNumbers" value.two-way="outputLineNumbers">

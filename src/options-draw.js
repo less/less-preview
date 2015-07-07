@@ -1,6 +1,7 @@
 import {customElement, bindable} from 'aurelia-framework';
 import less from './less';
 import lessOptions from './less-options';
+import lessFeatures from 'less-features';
 import {EventAggregator} from 'aurelia-event-aggregator';
 
 @customElement("options-draw")
@@ -42,5 +43,8 @@ export class optionsDraw {
   set outputLineNumbers(value) {
     lessOptions.dumpLineNumbers = value;
     this.eventAggregator.publish('lessChanged', {});
+  }
+  get outputLineNumbersAvailable() {
+    return lessFeatures.hasOutputLineNumbers();
   }
 }

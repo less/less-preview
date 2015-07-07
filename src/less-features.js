@@ -16,12 +16,20 @@ function compareVersions(current, featureVersion) {
 }
 
 const addedIn = {
-  promises: "2.0.0"
+  promises: "2.0.0",
+  outputLineNumbers: "1.3.1"
 };
+
+function has(feature) {
+  return compareVersions(lessOptions.version, feature);
+}
 
 class lessFeatures {
   static hasPromises() {
-    return compareVersions(lessOptions.version, addedIn.promises);
+    return has(addedIn.promises);
+  }
+  static hasOutputLineNumbers() {
+    return has(addedIn.outputLineNumbers);
   }
 }
 
