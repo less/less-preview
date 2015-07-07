@@ -1,12 +1,15 @@
 import {customElement, bindable} from 'aurelia-framework';
 import less from './less';
 import lessOptions from './less-options';
+import {EventAggregator} from 'aurelia-event-aggregator';
 
 @customElement("options-draw")
 export class optionsDraw {
   @bindable visible;
-  constructor() {
+  static inject = [EventAggregator];
+  constructor(eventAggregator) {
     this.lessVersions = less.getVersions();
+    this.eventAggregator = eventAggregator;
   }
   attached() {
   }
@@ -24,5 +27,20 @@ export class optionsDraw {
   }
   set selectedLessVersion(newVersion) {
     less.loadVersion(newVersion);
+    this.eventAggregator.publish('lessChanged', {});
+  }
+  toggleOutputLineNumbers() {
+    if (this.outputLineNumbers) {
+      this.outputLineNumbers = false;
+    } else {
+      this.outputLineNumbers = 'comments';
+    }
+  }
+  get outputLineNumbers() {
+    return Boolean(lessOptions.dumpLineNumbers);
+  }
+  set outputLineNumbers(value) {
+    lessOptions.dumpLineNumbers = value;
+    this.eventAggregator.publish('lessChanged', {});
   }
 }

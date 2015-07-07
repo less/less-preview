@@ -1,9 +1,12 @@
 import less from './less';
 import lessOptions from './less-options';
 import defaultLessSrc from './default-less-src';
+import {EventAggregator} from 'aurelia-event-aggregator';
 
 export class App {
-  constructor() {
+  static inject = [EventAggregator];
+  constructor(eventAggregator) {
+
     const lessVersions = less.getVersions();
     const lessVersion = lessVersions[lessVersions.length - 1];
     less.loadVersion(lessVersion);
@@ -24,9 +27,19 @@ export class App {
     if (!loadedFromHash) {
       this.lessSrc = defaultLessSrc;
     }
+
+    eventAggregator.subscribe('lessChanged', () => {
+      this.runLess();
+    });
   }
   openDraw() {
     this.isDrawerOpen = !this.isDrawerOpen;
+  }
+  runLess() {
+    less.convert(this._lessSrc)
+      .then((cssResp) => {
+        this.css = cssResp.css;
+      });
   }
   get lessSrc() {
     return this._lessSrc;
@@ -36,9 +49,6 @@ export class App {
     if (value !== defaultLessSrc) {
       window.location.hash = "#" + encodeURIComponent(JSON.stringify({less: value}));
     }
-    less.convert(value)
-      .then((cssResp) => {
-        this.css = cssResp.css;
-      });
+    this.runLess();
   }
 }

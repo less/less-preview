@@ -10,11 +10,11 @@
         </div>
         <div class="col-sm-3 option-column">
           <label class="control-label">Output Line Numbers</label>
-          <button class="btn btn-default col-sm-12">Disabled</button>
-          <select class="form-control" disabled="disabled" style="display: none;">
-            <option value="0" selected="selected">Comments</option>
-            <option value="1">Media Query</option>
-            <option value="2">All</option>
+          <button class="btn btn-default col-sm-12" click.delegate="toggleOutputLineNumbers();">${ outputLineNumbers ? "Enabled" : "Disabled" }</button>
+          <select class="form-control" show.bind="outputLineNumbers" value.two-way="outputLineNumbers">
+            <option value="comments" selected="selected">Comments</option>
+            <option value="mediaquery">Media Query</option>
+            <option value="all">All</option>
           </select>
         </div>
         <div class="col-sm-3 option-column">

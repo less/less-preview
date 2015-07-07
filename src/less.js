@@ -16,7 +16,7 @@ class less {
   convert(lessSrc) {
     return this.lessPromise
       .then((less) => {
-        return less.render(lessSrc);
+        return less.render(lessSrc, lessOptions);
       });
   }
 }

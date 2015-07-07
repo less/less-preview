@@ -1,4 +1,5 @@
 const lessOptions = {
-  version: ""
+  version: "",
+  dumpLineNumbers: false
 };
 export { lessOptions as default };
