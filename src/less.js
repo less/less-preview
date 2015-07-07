@@ -1,5 +1,6 @@
 import lessVersions from 'less-versions';
 import lessOptions from 'less-options';
+import lessFeatures from 'less-features';
 import insertScript from 'insert-script';
 
 class less {
@@ -16,7 +17,25 @@ class less {
   convert(lessSrc) {
     return this.lessPromise
       .then((less) => {
-        return less.render(lessSrc, lessOptions);
+        if (lessFeatures.hasPromises()) {
+          return less.render(lessSrc, lessOptions);
+        } else {
+          return new Promise((resolve, reject) => {
+            const parser = new less.Parser(lessOptions);
+            parser.parse(lessSrc, (e, tree) => {
+              if (!e && tree) {
+                try {
+                  const css = tree.toCSS(lessOptions);
+                  resolve({ css: css });
+                } catch(e) {
+                  reject(e);
+                }
+              } else {
+                reject(e);
+              }
+            });
+          });
+        }
       });
   }
 }
