@@ -17,22 +17,22 @@
             <option value="all">All</option>
           </select>
         </div>
-        <div class="col-sm-3 option-column">
+        <div class="col-sm-3 option-column" show.bind="relativeUrlsAvailable">
           <label class="control-label">Relative URLs</label>
           <button class="btn btn-default col-sm-12">Disabled</button>
         </div>
-        <div class="col-sm-3 option-column">
+        <div class="col-sm-3 option-column" show.bind="rootPathAvailable">
           <label class="control-label">Change Rootpath</label>
           <button class="btn btn-default col-sm-12">Disabled</button>
           <input placeholder="Enter rootpath" type="text" class="" disabled="disabled" style="display: none;">
         </div>
       </div>
-      <div class="row-fluid options-row last-row">
+      <div class="row-fluid options-row last-row" show.bind="strictMathAvailable">
         <div class="col-sm-3 option-column">
           <label class="control-label">Strict Math</label>
           <button class="btn btn-default col-sm-12">Disabled</button>
         </div>
-        <div class="col-sm-3 option-column">
+        <div class="col-sm-3 option-column" show.bind="strictUnitsAvailable">
           <label class="control-label">Strict Units</label>
           <button class="btn btn-default col-sm-12">Disabled</button>
         </div>

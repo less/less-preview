@@ -30,6 +30,7 @@ export class optionsDraw {
     less.loadVersion(newVersion);
     this.eventAggregator.publish('lessChanged', {});
   }
+
   toggleOutputLineNumbers() {
     if (this.outputLineNumbers) {
       this.outputLineNumbers = false;
@@ -46,5 +47,18 @@ export class optionsDraw {
   }
   get outputLineNumbersAvailable() {
     return lessFeatures.hasOutputLineNumbers();
+  }
+
+  get relativeUrlsAvailable() {
+    return lessFeatures.hasRelativeUrls();
+  }
+  get rootPathAvailable() {
+    return lessFeatures.hasRootPath();
+  }
+  get strictMathAvailable() {
+    return lessFeatures.hasStrictMath();
+  }
+  get strictUnitsAvailable() {
+    return lessFeatures.hasStrictUnits();
   }
 }

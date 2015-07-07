@@ -17,7 +17,11 @@ function compareVersions(current, featureVersion) {
 
 const addedIn = {
   promises: "2.0.0",
-  outputLineNumbers: "1.3.1"
+  outputLineNumbers: "1.3.1",
+  relativeUrls: "1.3.2",
+  rootPath: "1.3.2",
+  strictMath: "1.4.0",
+  strictUnits: "1.4.0"
 };
 
 function has(feature) {
@@ -30,6 +34,18 @@ class lessFeatures {
   }
   static hasOutputLineNumbers() {
     return has(addedIn.outputLineNumbers);
+  }
+  static hasRelativeUrls() {
+    return has(addedIn.relativeUrls);
+  }
+  static hasRootPath() {
+    return has(addedIn.rootPath);
+  }
+  static hasStrictMath() {
+    return has(addedIn.strictMath);
+  }
+  static hasStrictUnits() {
+    return has(addedIn.strictUnits);
   }
 }
 
