@@ -31,19 +31,22 @@ export class optionsDraw {
     this.eventAggregator.publish('lessChanged', {});
   }
 
-  toggleOutputLineNumbers() {
-    if (this.outputLineNumbers) {
-      this.outputLineNumbers = false;
-    } else {
-      this.outputLineNumbers = 'comments';
-    }
+  get outputLineNumbersType() {
+    return lessOptions.dumpLineNumbers || null;
+  }
+  set outputLineNumbersType(value) {
+    lessOptions.dumpLineNumbers = value;
+    this.eventAggregator.publish('lessChanged', {});
   }
   get outputLineNumbers() {
     return Boolean(lessOptions.dumpLineNumbers);
   }
   set outputLineNumbers(value) {
-    lessOptions.dumpLineNumbers = value;
-    this.eventAggregator.publish('lessChanged', {});
+    if (value) {
+      this.outputLineNumbersType = 'comments';
+    } else {
+      this.outputLineNumbersType = false;
+    }
   }
   get outputLineNumbersAvailable() {
     return lessFeatures.hasOutputLineNumbers();

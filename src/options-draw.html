@@ -1,4 +1,5 @@
 <template>
+  <require from='./toggle-button'></require>
   <section class="options-drawer" css="opacity: ${isVisible ? '1' : '0'}; top: ${isVisible ? '43px' : '0px'}; display: ${isDisplayed ? 'block' : 'none'}">
     <article class="options-drawer-wrap">
       <div class="row-fluid options-row first-row">
@@ -10,8 +11,8 @@
         </div>
         <div class="col-sm-3 option-column" show.bind="outputLineNumbersAvailable">
           <label class="control-label">Output Line Numbers</label>
-          <button class="btn btn-default col-sm-12" click.delegate="toggleOutputLineNumbers();">${ outputLineNumbers ? "Enabled" : "Disabled" }</button>
-          <select class="form-control" show.bind="outputLineNumbers" value.two-way="outputLineNumbers">
+          <toggle-button enabled.two-way="outputLineNumbers"></toggle-button>
+          <select class="form-control" show.bind="outputLineNumbers" value.two-way="outputLineNumbersType">
             <option value="comments" selected="selected">Comments</option>
             <option value="mediaquery">Media Query</option>
             <option value="all">All</option>
@@ -19,22 +20,22 @@
         </div>
         <div class="col-sm-3 option-column" show.bind="relativeUrlsAvailable">
           <label class="control-label">Relative URLs</label>
-          <button class="btn btn-default col-sm-12">Disabled</button>
+          <toggle-button enabled.two-way="relativeUrls"></toggle-button>
         </div>
         <div class="col-sm-3 option-column" show.bind="rootPathAvailable">
           <label class="control-label">Change Rootpath</label>
-          <button class="btn btn-default col-sm-12">Disabled</button>
+          <toggle-button enabled.two-way="rootPathEnabled"></toggle-button>
           <input placeholder="Enter rootpath" type="text" class="" disabled="disabled" style="display: none;">
         </div>
       </div>
       <div class="row-fluid options-row last-row" show.bind="strictMathAvailable">
         <div class="col-sm-3 option-column">
           <label class="control-label">Strict Math</label>
-          <button class="btn btn-default col-sm-12">Disabled</button>
+          <toggle-button enabled.two-way="strictMath"></toggle-button>
         </div>
         <div class="col-sm-3 option-column" show.bind="strictUnitsAvailable">
           <label class="control-label">Strict Units</label>
-          <button class="btn btn-default col-sm-12">Disabled</button>
+          <toggle-button enabled.two-way="strictUnits"></toggle-button>
         </div>
       </div>
     </article>
