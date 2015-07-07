@@ -55,13 +55,54 @@ export class optionsDraw {
   get relativeUrlsAvailable() {
     return lessFeatures.hasRelativeUrls();
   }
+  get relativeUrls() {
+    return lessOptions.relativeUrls;
+  }
+  set relativeUrls(value) {
+    lessOptions.relativeUrls = value;
+    this.eventAggregator.publish('lessChanged', {});
+  }
+
   get rootPathAvailable() {
     return lessFeatures.hasRootPath();
   }
+  get rootPath() {
+    return lessOptions.rootPath;
+  }
+  set rootPath(value) {
+    lessOptions.rootPath = value;
+    this.eventAggregator.publish('lessChanged', {});
+  }
+  get rootPathEnabled() {
+    return Boolean(this.rootPath);
+  }
+  set rootPathEnabled(value) {
+    if (!value) {
+      this.rootPath = "";
+    } else {
+      this.rootPath = "/path/to/";
+    }
+  }
+
   get strictMathAvailable() {
     return lessFeatures.hasStrictMath();
   }
+  get strictMath() {
+    return lessOptions.strictMath;
+  }
+  set strictMath(value) {
+    lessOptions.strictMath = value;
+    this.eventAggregator.publish('lessChanged', {});
+  }
+
   get strictUnitsAvailable() {
     return lessFeatures.hasStrictUnits();
+  }
+  get strictUnits() {
+    return lessOptions.strictUnits;
+  }
+  set strictUnits(value) {
+    lessOptions.strictUnits = value;
+    this.eventAggregator.publish('lessChanged', {});
   }
 }
