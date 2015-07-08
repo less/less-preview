@@ -15,12 +15,13 @@ export class optionsDraw {
   attached() {
   }
   visibleChanged(newValue) {
+    clearTimeout(this._timeout);
     if (newValue) {
       this.isDisplayed = true;
-      setTimeout(() => this.isVisible = true, 0);
+      this._timeout = setTimeout(() => this.isVisible = true, 0);
     } else {
       this.isVisible = false;
-      setTimeout(() => this.isDisplayed = false, 1000);
+      this._timeout = setTimeout(() => this.isDisplayed = false, 1000);
     }
   }
   get selectedLessVersion() {
