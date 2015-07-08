@@ -39,7 +39,56 @@ export class App {
     less.convert(this._lessSrc)
       .then((cssResp) => {
         this.css = cssResp.css;
+        this.hasError = false;
+      })
+      .catch((err) => {
+        this.css = this.convertError(err);
+        this.hasError = true;
       });
+  }
+  convertError(err) {
+    var message = "";
+    var extract = err.extract;
+    var error = [];
+
+    // only output a stack if it isn't a less error
+    if (err.stack && !err.type) { return err.stack; }
+
+    if (!err.hasOwnProperty('index') || !extract) {
+      return err.stack || err.message;
+    }
+
+    if (typeof extract[0] === 'string') {
+      error.push((err.line - 1) + ' ' + extract[0]);
+    }
+
+    if (typeof extract[1] === 'string') {
+      var errorTxt = err.line + ' ';
+      if (extract[1]) {
+        errorTxt += extract[1].slice(0, err.column) +
+          extract[1].substr(err.column, 1) +
+            extract[1].slice(err.column + 1);
+      }
+      error.push(errorTxt);
+    }
+
+    if (typeof extract[2] === 'string') {
+      error.push((err.line + 1) + ' ' + extract[2]);
+    }
+    error = error.join('\n') + '\n';
+
+    message += err.type + 'Error: ' + err.message;
+    if (err.filename) {
+      message += ' on line ' + err.line + ', column ' + (err.column + 1) + ':';
+    }
+
+    message += '\n\n' + error;
+
+    if (err.callLine) {
+      message += 'from ' + err.callLine + ' ' + err.callExtract + '/n';
+    }
+
+    return message;
   }
   get lessSrc() {
     return this._lessSrc;
