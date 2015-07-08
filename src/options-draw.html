@@ -2,7 +2,7 @@
   <require from='./toggle-button'></require>
   <section class="options-drawer" css="opacity: ${isVisible ? '1' : '0'}; top: ${isVisible ? '43px' : '0px'}; display: ${isDisplayed ? 'block' : 'none'}">
     <article class="options-drawer-wrap">
-      <div class="row-fluid options-row first-row">
+      <div class="row options-row first-row">
         <div class="col-sm-3 option-column">
           <label for="less-version" class="control-label">LESS Version</label>
           <select id="less-version" class="less-version form-control" value.two-way="selectedLessVersion">
@@ -25,10 +25,10 @@
         <div class="col-sm-3 option-column" show.bind="rootPathAvailable">
           <label class="control-label">Change Rootpath</label>
           <toggle-button enabled.two-way="rootPathEnabled"></toggle-button>
-          <input placeholder="Enter rootpath" type="text" show.bind="rootPathEnabled" value.two-way="rootPath">
+          <input placeholder="Enter rootpath" type="text" show.bind="rootPathEnabled" value.two-way="rootPath" class="form-control">
         </div>
       </div>
-      <div class="row-fluid options-row last-row" show.bind="strictMathAvailable">
+      <div class="row options-row last-row" show.bind="strictMathAvailable">
         <div class="col-sm-3 option-column">
           <label class="control-label">Strict Math</label>
           <toggle-button enabled.two-way="strictMath"></toggle-button>

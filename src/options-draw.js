@@ -67,10 +67,10 @@ export class optionsDraw {
     return lessFeatures.hasRootPath();
   }
   get rootPath() {
-    return lessOptions.rootPath;
+    return lessOptions.rootpath;
   }
   set rootPath(value) {
-    lessOptions.rootPath = value;
+    lessOptions.rootpath = value;
     this.eventAggregator.publish('lessChanged', {});
   }
   get rootPathEnabled() {
