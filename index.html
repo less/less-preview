@@ -5,8 +5,13 @@
   </head>
   <body aurelia-app="main">
     <div class="splash">
-      <div class="message"></div>
-      <i class="fa fa-spinner fa-spin"></i>
+      <i class="hexdots-loader">Loading...</i>
+      <!--[if IE 9]>
+      <div class="message">IE9 will be slow. Use a modern browser!</div>
+      <![endif]-->
+      <!--[if IE LT 9]>
+      <div class="message">This site requires a modern browser! It will not load.</div>
+      <![endif]-->
     </div>
 
     <script src="jspm_packages/system.js"></script>
