@@ -1,18 +1,19 @@
 const lessSrc = `.transition(@transition) {
   -webkit-transition: @transition;
--moz-transition: @transition;
--o-transition: @transition;
-transition: @transition;
+  -moz-transition: @transition;
+  -o-transition: @transition;
+  transition: @transition;
 }
+
+// Maybe decimals make you feel gross for some reason and you want to use '%'?
 .opacity(@opacity) {
-  opacity: @opacity / 100;
-  filter: ~"alpha(opacity=@{opacity})";
+  opacity: \`parseFloat('@{opacity}') / 100\`;
 }
 
 a {
-.transition(all 0.4s);
-&:hover {
-  .opacity(70);
+  .transition(all 0.4s);
+  &:hover {
+    .opacity(70%);
   }
 }
 
