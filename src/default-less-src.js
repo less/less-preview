@@ -1,27 +1,23 @@
-const lessSrc = `.transition(@transition) {
-  -webkit-transition: @transition;
-  -moz-transition: @transition;
-  -o-transition: @transition;
-  transition: @transition;
-}
-
-// Maybe decimals make you feel gross for some reason and you want to use '%'?
-.opacity(@opacity) {
-  opacity: \`parseFloat('@{opacity}') / 100\`;
-}
-
-a {
-  .transition(all 0.4s);
-  &:hover {
-    .opacity(70%);
+const lessSrc = `#lib() {
+  .colors() {
+    @primary: blue;
+    @secondary: green;
+  }
+  .rules(@size) {
+    border: @size solid white;  
   }
 }
 
-// Selector interpolation only works in 1.3.1+. Try it!
-@theGoodThings: ~".food, .beer, .sleep, .javascript";
+.box when (#lib.colors[@primary] = blue) {
+  width: 100px;
+  height: ($width / 2);
+}
 
-@{theGoodThings} {
-  font-weight: bold;
+.bar:extend(.box) {
+  @media (min-width: 600px) {
+    width: 200px;
+    #lib.rules(1px);
+  }
 }`;
 
 export { lessSrc as default };
