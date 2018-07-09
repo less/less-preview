@@ -4,7 +4,7 @@ var exec = require('child_process').exec;
 var paths = require('../paths');
 
 gulp.task('bundle-cmd', ['build', 'clean-bundle'], function(callback) {
-  exec('node node_modules/aurelia-cli/bin/aurelia bundle', function (err, stdout, stderr) {
+  exec('node node_modules/aurelia-cli/bin/aurelia-cli bundle', function (err, stdout, stderr) {
     console.log(stdout);
     console.error(stderr);
     callback();
