@@ -9,5 +9,5 @@ gulp watch
 ## How to publish
 
 ```
-gulp publish
+gulp bundle
 ```
