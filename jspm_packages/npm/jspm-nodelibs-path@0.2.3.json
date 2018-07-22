@@ -1,8 +1,0 @@
-{
-  "main": "./path.js",
-  "map": {
-    "./path.js": {
-      "node": "@node/path"
-    }
-  }
-}
