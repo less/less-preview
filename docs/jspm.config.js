@@ -17,7 +17,8 @@ SystemJS.config({
   devConfig: {
     "map": {
       "babel-runtime": "npm:babel-runtime@5.8.38",
-      "plugin-babel": "npm:systemjs-plugin-babel@0.0.25"
+      "plugin-babel": "npm:systemjs-plugin-babel@0.0.25",
+      "core-js": "npm:core-js@1.2.7"
     },
     "packages": {
       "npm:babel-runtime@5.8.38": {

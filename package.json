@@ -75,6 +75,7 @@
     },
     "devDependencies": {
       "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.2.0",
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.25"
     },
     "peerDependencies": {
