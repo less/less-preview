@@ -71,12 +71,12 @@
       "aurelia-templating-binding": "github:aurelia/templating-binding@^0.13.0",
       "aurelia-templating-resources": "github:aurelia/templating-resources@^0.13.0",
       "codemirror": "npm:codemirror@5.4.0",
+      "core-js": "npm:core-js@^1.1.4",
       "polymer/mutationobservers": "github:googlearchive/MutationObservers@0.4.2"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
-      "babel-runtime": "npm:babel-runtime@^5.8.24",
-      "core-js": "npm:core-js@^1.1.4"
+      "babel-runtime": "npm:babel-runtime@^5.8.24"
     },
     "overrides": {
       "npm:codemirror@5.4.0": {
