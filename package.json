@@ -71,7 +71,7 @@
       "aurelia-templating-binding": "npm:aurelia-templating-binding@^1.4.3",
       "aurelia-templating-resources": "npm:aurelia-templating-resources@^1.7.1",
       "codemirror": "npm:codemirror@5.4.0",
-      "core-js": "npm:core-js@^1.1.4",
+      "core-js": "npm:core-js@1.2.7",
       "polymer/mutationobservers": "github:googlearchive/MutationObservers@0.4.2"
     },
     "devDependencies": {
@@ -85,6 +85,9 @@
             "exports": "CodeMirror"
           }
         }
+      },
+      "npm:core-js@1.2.7": {
+        "main": "client/shim.min"
       }
     }
   },
