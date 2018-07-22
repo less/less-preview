@@ -3,7 +3,7 @@
     <header class="titlebar">
       <div class="title">Less Preview</div>
     </header>
-    <section :class="{container: true, 'has-error': errorMessage}">
+    <section :class="{container: true, 'has-error': errorMessage, 'refresh': updateStyle}">
       <div class="editor">
         <editor
           v-model="input"
@@ -40,10 +40,55 @@
 
 import editor from 'vue2-ace-editor'
 
+function updateVue(self, newInput) {
+  let interval
+  const updateWithLess = () => {
+    if (window.less) {
+      clearInterval(interval)
+      window.less.render(newInput, {}, function(error, output) {
+        if (error) {
+          self.errorMessage = error.message
+          self.output = ''
+        } else {
+          self.errorMessage = ''
+          self.output = output.css
+        }
+      })
+    }
+  }
+  if (!window.less) {
+    interval = setInterval(updateWithLess, 100)
+  } else {
+    updateWithLess()
+  }
+}
+
 export default {
   data() {
     return {
-      input: 'test',
+      updateStyle: false,
+      input: 
+`#lib() {
+  .colors() {
+    @primary: blue;
+    @secondary: green;
+  }
+  .rules(@size) {
+    border: @size solid white;
+  }
+}
+
+.box when (#lib.colors[@primary] = blue) {
+  width: 100px;
+  height: ($width / 2);
+}
+
+.bar:extend(.box) {
+  @media (min-width: 600px) {
+    width: 200px;
+    #lib.rules(1px);
+  }
+}`,
       output: '',
       errorMessage: ''
     }
@@ -58,18 +103,19 @@ export default {
   components: {
     editor
   },
+  mounted: function () {
+    this.$nextTick(function () {
+      updateVue(this, this.input)
+      this.updateStyle = true
+      requestAnimationFrame(() => {
+        void document.offsetHeight
+        this.updateStyle = false
+      })
+    })
+  },
   watch: {
     input(newInput) {
-      var self = this
-      less.render(newInput, {}, function(error, output) {
-        if (error) {
-          self.errorMessage = error.message
-          self.output = ''
-        } else {
-          self.errorMessage = ''
-          self.output = output.css
-        }
-      })
+      updateVue(this, newInput)
     }
   }
 }
@@ -99,6 +145,10 @@ body {
   padding: 6px 0;
   &.has-error {
     height: calc(100vh - 60px);
+  }
+  &.refresh {
+    text-indent: 0.1px;
+    -webkit-text-stroke: 0.1px transparent;
   }
 }
 @keyframes opac {
