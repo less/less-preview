@@ -1,2 +1,1 @@
-/* */ 
-module.exports = require('./temporalUndefined');
+module.exports = require("./temporalUndefined.js");

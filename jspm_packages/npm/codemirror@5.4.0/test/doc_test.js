@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 (function() {
   // A minilanguage for instantiating linked CodeMirror instances and Docs
   function instantiateSpec(spec, place, opts) {

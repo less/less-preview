@@ -1,19 +1,22 @@
-/* */ 
-"format cjs";
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
 (function(mod) {
-  if (typeof exports == "object" && typeof module == "object")
-    mod(require('../../lib/codemirror'));
-  else if (typeof define == "function" && define.amd)
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
     define(["../../lib/codemirror"], mod);
-  else
+  else // Plain browser env
     mod(CodeMirror);
 })(function(CodeMirror) {
   "use strict";
+
   function errorIfNotEmpty(stream) {
     var nonWS = stream.match(/^\s*\S/);
     stream.skipToEnd();
     return nonWS ? "error" : null;
   }
+
   CodeMirror.defineMode("asciiarmor", function() {
     return {
       token: function(stream, state) {
@@ -31,8 +34,7 @@
             return "atom";
           } else {
             var result = errorIfNotEmpty(stream);
-            if (result)
-              state.state = "body";
+            if (result) state.state = "body";
             return result;
           }
         } else if (state.state == "header") {
@@ -41,8 +43,7 @@
           return "string";
         } else if (state.state == "body") {
           if (stream.sol() && (m = stream.match(/^-----END (.*)?-----\s*$/))) {
-            if (m[1] != state.type)
-              return "error";
+            if (m[1] != state.type) return "error";
             state.state = "end";
             return "tag";
           } else {
@@ -58,17 +59,14 @@
         }
       },
       blankLine: function(state) {
-        if (state.state == "headers")
-          state.state = "body";
+        if (state.state == "headers") state.state = "body";
       },
       startState: function() {
-        return {
-          state: "top",
-          type: null
-        };
+        return {state: "top", type: null};
       }
     };
   });
+
   CodeMirror.defineMIME("application/pgp", "asciiarmor");
   CodeMirror.defineMIME("application/pgp-keys", "asciiarmor");
   CodeMirror.defineMIME("application/pgp-signature", "asciiarmor");

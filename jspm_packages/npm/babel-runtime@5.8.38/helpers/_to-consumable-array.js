@@ -1,2 +1,1 @@
-/* */ 
-module.exports = require('./toConsumableArray');
+module.exports = require("./toConsumableArray.js");

@@ -1,15 +1,17 @@
-/* */ 
-"format cjs";
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
 (function(mod) {
-  if (typeof exports == "object" && typeof module == "object") {
-    mod(require('../../lib/codemirror'));
-  } else if (typeof define == "function" && define.amd) {
+  if (typeof exports == "object" && typeof module == "object") { // CommonJS
+    mod(require("../../lib/codemirror"));
+  } else if (typeof define == "function" && define.amd) { // AMD
     define(["../../lib/codemirror"], mod);
-  } else {
+  } else { // Plain browser env
     mod(CodeMirror);
   }
 })(function(CodeMirror) {
   "use strict";
+
   var TOKEN_STYLES = {
     addition: "positive",
     attributes: "attribute",
@@ -43,12 +45,16 @@
     table: "variable-3",
     tableHeading: "operator"
   };
+
   function startNewLine(stream, state) {
     state.mode = Modes.newLayout;
     state.tableHeading = false;
-    if (state.layoutType === "definitionList" && state.spanningLayout && stream.match(RE("definitionListEnd"), false))
+
+    if (state.layoutType === "definitionList" && state.spanningLayout &&
+        stream.match(RE("definitionListEnd"), false))
       state.spanningLayout = false;
   }
+
   function handlePhraseModifier(stream, state, ch) {
     if (ch === "_") {
       if (stream.eat("_"))
@@ -56,47 +62,60 @@
       else
         return togglePhraseModifier(stream, state, "em", /_/, 1);
     }
+
     if (ch === "*") {
       if (stream.eat("*")) {
         return togglePhraseModifier(stream, state, "bold", /\*\*/, 2);
       }
       return togglePhraseModifier(stream, state, "strong", /\*/, 1);
     }
+
     if (ch === "[") {
-      if (stream.match(/\d+\]/))
-        state.footCite = true;
+      if (stream.match(/\d+\]/)) state.footCite = true;
       return tokenStyles(state);
     }
+
     if (ch === "(") {
       var spec = stream.match(/^(r|tm|c)\)/);
       if (spec)
         return tokenStylesWith(state, TOKEN_STYLES.specialChar);
     }
+
     if (ch === "<" && stream.match(/(\w+)[^>]+>[^<]+<\/\1>/))
       return tokenStylesWith(state, TOKEN_STYLES.html);
+
     if (ch === "?" && stream.eat("?"))
       return togglePhraseModifier(stream, state, "cite", /\?\?/, 2);
+
     if (ch === "=" && stream.eat("="))
       return togglePhraseModifier(stream, state, "notextile", /==/, 2);
+
     if (ch === "-" && !stream.eat("-"))
       return togglePhraseModifier(stream, state, "deletion", /-/, 1);
+
     if (ch === "+")
       return togglePhraseModifier(stream, state, "addition", /\+/, 1);
+
     if (ch === "~")
       return togglePhraseModifier(stream, state, "sub", /~/, 1);
+
     if (ch === "^")
       return togglePhraseModifier(stream, state, "sup", /\^/, 1);
+
     if (ch === "%")
       return togglePhraseModifier(stream, state, "span", /%/, 1);
+
     if (ch === "@")
       return togglePhraseModifier(stream, state, "code", /@/, 1);
+
     if (ch === "!") {
       var type = togglePhraseModifier(stream, state, "image", /(?:\([^\)]+\))?!/, 1);
-      stream.match(/^:\S+/);
+      stream.match(/^:\S+/); // optional Url portion
       return type;
     }
     return tokenStyles(state);
   }
+
   function togglePhraseModifier(stream, state, phraseModifier, closeRE, openSize) {
     var charBefore = stream.pos > openSize ? stream.string.charAt(stream.pos - openSize - 1) : null;
     var charAfter = stream.peek();
@@ -106,48 +125,57 @@
         state[phraseModifier] = false;
         return type;
       }
-    } else if ((!charBefore || /\W/.test(charBefore)) && charAfter && /\S/.test(charAfter) && stream.match(new RegExp("^.*\\S" + closeRE.source + "(?:\\W|$)"), false)) {
+    } else if ((!charBefore || /\W/.test(charBefore)) && charAfter && /\S/.test(charAfter) &&
+               stream.match(new RegExp("^.*\\S" + closeRE.source + "(?:\\W|$)"), false)) {
       state[phraseModifier] = true;
       state.mode = Modes.attributes;
     }
     return tokenStyles(state);
-  }
-  ;
+  };
+
   function tokenStyles(state) {
     var disabled = textileDisabled(state);
-    if (disabled)
-      return disabled;
+    if (disabled) return disabled;
+
     var styles = [];
-    if (state.layoutType)
-      styles.push(TOKEN_STYLES[state.layoutType]);
-    styles = styles.concat(activeStyles(state, "addition", "bold", "cite", "code", "deletion", "em", "footCite", "image", "italic", "link", "span", "strong", "sub", "sup", "table", "tableHeading"));
+    if (state.layoutType) styles.push(TOKEN_STYLES[state.layoutType]);
+
+    styles = styles.concat(activeStyles(
+      state, "addition", "bold", "cite", "code", "deletion", "em", "footCite",
+      "image", "italic", "link", "span", "strong", "sub", "sup", "table", "tableHeading"));
+
     if (state.layoutType === "header")
       styles.push(TOKEN_STYLES.header + "-" + state.header);
+
     return styles.length ? styles.join(" ") : null;
   }
+
   function textileDisabled(state) {
     var type = state.layoutType;
-    switch (type) {
-      case "notextile":
-      case "code":
-      case "pre":
-        return TOKEN_STYLES[type];
-      default:
-        if (state.notextile)
-          return TOKEN_STYLES.notextile + (type ? (" " + TOKEN_STYLES[type]) : "");
-        return null;
+
+    switch(type) {
+    case "notextile":
+    case "code":
+    case "pre":
+      return TOKEN_STYLES[type];
+    default:
+      if (state.notextile)
+        return TOKEN_STYLES.notextile + (type ? (" " + TOKEN_STYLES[type]) : "");
+      return null;
     }
   }
+
   function tokenStylesWith(state, extraStyles) {
     var disabled = textileDisabled(state);
-    if (disabled)
-      return disabled;
+    if (disabled) return disabled;
+
     var type = tokenStyles(state);
     if (extraStyles)
       return type ? (type + " " + extraStyles) : extraStyles;
     else
       return type;
   }
+
   function activeStyles(state) {
     var styles = [];
     for (var i = 1; i < arguments.length; ++i) {
@@ -156,18 +184,20 @@
     }
     return styles;
   }
+
   function blankLine(state) {
-    var spanningLayout = state.spanningLayout,
-        type = state.layoutType;
-    for (var key in state)
-      if (state.hasOwnProperty(key))
-        delete state[key];
+    var spanningLayout = state.spanningLayout, type = state.layoutType;
+
+    for (var key in state) if (state.hasOwnProperty(key))
+      delete state[key];
+
     state.mode = Modes.newLayout;
     if (spanningLayout) {
       state.layoutType = type;
       state.spanningLayout = true;
     }
   }
+
   var REs = {
     cache: {},
     single: {
@@ -201,28 +231,37 @@
     },
     createRe: function(name) {
       switch (name) {
-        case "drawTable":
-          return REs.makeRe("^", REs.single.drawTable, "$");
-        case "html":
-          return REs.makeRe("^", REs.single.html, "(?:", REs.single.html, ")*", "$");
-        case "linkDefinition":
-          return REs.makeRe("^", REs.single.linkDefinition, "$");
-        case "listLayout":
-          return REs.makeRe("^", REs.single.list, RE("allAttributes"), "*\\s+");
-        case "tableCellAttributes":
-          return REs.makeRe("^", REs.choiceRe(REs.single.tableCellAttributes, RE("allAttributes")), "+\\.");
-        case "type":
-          return REs.makeRe("^", RE("allTypes"));
-        case "typeLayout":
-          return REs.makeRe("^", RE("allTypes"), RE("allAttributes"), "*\\.\\.?", "(\\s+|$)");
-        case "attributes":
-          return REs.makeRe("^", RE("allAttributes"), "+");
-        case "allTypes":
-          return REs.choiceRe(REs.single.div, REs.single.foot, REs.single.header, REs.single.bc, REs.single.bq, REs.single.notextile, REs.single.pre, REs.single.table, REs.single.para);
-        case "allAttributes":
-          return REs.choiceRe(REs.attributes.selector, REs.attributes.css, REs.attributes.lang, REs.attributes.align, REs.attributes.pad);
-        default:
-          return REs.makeRe("^", REs.single[name]);
+      case "drawTable":
+        return REs.makeRe("^", REs.single.drawTable, "$");
+      case "html":
+        return REs.makeRe("^", REs.single.html, "(?:", REs.single.html, ")*", "$");
+      case "linkDefinition":
+        return REs.makeRe("^", REs.single.linkDefinition, "$");
+      case "listLayout":
+        return REs.makeRe("^", REs.single.list, RE("allAttributes"), "*\\s+");
+      case "tableCellAttributes":
+        return REs.makeRe("^", REs.choiceRe(REs.single.tableCellAttributes,
+                                            RE("allAttributes")), "+\\.");
+      case "type":
+        return REs.makeRe("^", RE("allTypes"));
+      case "typeLayout":
+        return REs.makeRe("^", RE("allTypes"), RE("allAttributes"),
+                          "*\\.\\.?", "(\\s+|$)");
+      case "attributes":
+        return REs.makeRe("^", RE("allAttributes"), "+");
+
+      case "allTypes":
+        return REs.choiceRe(REs.single.div, REs.single.foot,
+                            REs.single.header, REs.single.bc, REs.single.bq,
+                            REs.single.notextile, REs.single.pre, REs.single.table,
+                            REs.single.para);
+
+      case "allAttributes":
+        return REs.choiceRe(REs.attributes.selector, REs.attributes.css,
+                            REs.attributes.lang, REs.attributes.align, REs.attributes.pad);
+
+      default:
+        return REs.makeRe("^", REs.single[name]);
       }
     },
     makeRe: function() {
@@ -239,14 +278,17 @@
         parts[i * 2 - 1] = "|";
         parts[i * 2] = arguments[i];
       }
+
       parts.unshift("(?:");
       parts.push(")");
       return REs.makeRe.apply(null, parts);
     }
   };
+
   function RE(name) {
     return (REs.cache[name] || (REs.cache[name] = REs.createRe(name)));
   }
+
   var Modes = {
     newLayout: function(stream, state) {
       if (stream.match(RE("typeLayout"), false)) {
@@ -268,14 +310,16 @@
       }
       return (state.mode = (newMode || Modes.text))(stream, state);
     },
+
     blockType: function(stream, state) {
-      var match,
-          type;
+      var match, type;
       state.layoutType = null;
+
       if (match = stream.match(RE("type")))
         type = match[0];
       else
         return (state.mode = Modes.text)(stream, state);
+
       if (match = type.match(RE("header"))) {
         state.layoutType = "header";
         state.header = parseInt(match[0][1]);
@@ -294,30 +338,37 @@
       } else if (type.match(RE("table"))) {
         state.layoutType = "table";
       }
+
       state.mode = Modes.attributes;
       return tokenStyles(state);
     },
+
     text: function(stream, state) {
-      if (stream.match(RE("text")))
-        return tokenStyles(state);
+      if (stream.match(RE("text"))) return tokenStyles(state);
+
       var ch = stream.next();
       if (ch === '"')
         return (state.mode = Modes.link)(stream, state);
       return handlePhraseModifier(stream, state, ch);
     },
+
     attributes: function(stream, state) {
       state.mode = Modes.layoutLength;
+
       if (stream.match(RE("attributes")))
         return tokenStylesWith(state, TOKEN_STYLES.attributes);
       else
         return tokenStyles(state);
     },
+
     layoutLength: function(stream, state) {
       if (stream.eat(".") && stream.eat("."))
         state.spanningLayout = true;
+
       state.mode = Modes.text;
       return tokenStyles(state);
     },
+
     list: function(stream, state) {
       var match = stream.match(RE("list"));
       state.listDepth = match[0].length;
@@ -328,9 +379,11 @@
         state.layoutType = "list2";
       else
         state.layoutType = "list3";
+
       state.mode = Modes.attributes;
       return tokenStyles(state);
     },
+
     link: function(stream, state) {
       state.mode = Modes.text;
       if (stream.match(RE("link"))) {
@@ -339,64 +392,78 @@
       }
       return tokenStyles(state);
     },
+
     linkDefinition: function(stream, state) {
       stream.skipToEnd();
       return tokenStylesWith(state, TOKEN_STYLES.linkDefinition);
     },
+
     definitionList: function(stream, state) {
       stream.match(RE("definitionList"));
+
       state.layoutType = "definitionList";
+
       if (stream.match(/\s*$/))
         state.spanningLayout = true;
       else
         state.mode = Modes.attributes;
+
       return tokenStyles(state);
     },
+
     html: function(stream, state) {
       stream.skipToEnd();
       return tokenStylesWith(state, TOKEN_STYLES.html);
     },
+
     table: function(stream, state) {
       state.layoutType = "table";
       return (state.mode = Modes.tableCell)(stream, state);
     },
+
     tableCell: function(stream, state) {
       if (stream.match(RE("tableHeading")))
         state.tableHeading = true;
       else
         stream.eat("|");
+
       state.mode = Modes.tableCellAttributes;
       return tokenStyles(state);
     },
+
     tableCellAttributes: function(stream, state) {
       state.mode = Modes.tableText;
+
       if (stream.match(RE("tableCellAttributes")))
         return tokenStylesWith(state, TOKEN_STYLES.attributes);
       else
         return tokenStyles(state);
     },
+
     tableText: function(stream, state) {
       if (stream.match(RE("tableText")))
         return tokenStyles(state);
-      if (stream.peek() === "|") {
+
+      if (stream.peek() === "|") { // end of cell
         state.mode = Modes.tableCell;
         return tokenStyles(state);
       }
       return handlePhraseModifier(stream, state, stream.next());
     }
   };
+
   CodeMirror.defineMode("textile", function() {
     return {
       startState: function() {
-        return {mode: Modes.newLayout};
+        return { mode: Modes.newLayout };
       },
       token: function(stream, state) {
-        if (stream.sol())
-          startNewLine(stream, state);
+        if (stream.sol()) startNewLine(stream, state);
         return state.mode(stream, state);
       },
       blankLine: blankLine
     };
   });
+
   CodeMirror.defineMIME("text/x-textile", "textile");
 });

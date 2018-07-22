@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 CodeMirror.Vim.suppressErrorLogging = true;
 
 var code = '' +

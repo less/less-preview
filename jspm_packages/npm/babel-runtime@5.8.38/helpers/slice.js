@@ -1,4 +1,3 @@
-/* */ 
 "use strict";
 
 exports["default"] = Array.prototype.slice;

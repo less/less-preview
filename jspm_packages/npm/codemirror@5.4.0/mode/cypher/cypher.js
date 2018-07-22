@@ -1,19 +1,24 @@
-/* */ 
-"format cjs";
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
+// By the Neo4j Team and contributors.
+// https://github.com/neo4j-contrib/CodeMirror
+
 (function(mod) {
-  if (typeof exports == "object" && typeof module == "object")
-    mod(require('../../lib/codemirror'));
-  else if (typeof define == "function" && define.amd)
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
     define(["../../lib/codemirror"], mod);
-  else
+  else // Plain browser env
     mod(CodeMirror);
 })(function(CodeMirror) {
   "use strict";
   var wordRegexp = function(words) {
     return new RegExp("^(?:" + words.join("|") + ")$", "i");
   };
+
   CodeMirror.defineMode("cypher", function(config) {
-    var tokenBase = function(stream) {
+    var tokenBase = function(stream/*, state*/) {
       var ch = stream.next();
       if (ch === "\"" || ch === "'") {
         stream.match(/.+?["']/);
@@ -35,12 +40,9 @@
           return "atom";
         }
         var word = stream.current();
-        if (funcs.test(word))
-          return "builtin";
-        if (preds.test(word))
-          return "def";
-        if (keywords.test(word))
-          return "keyword";
+        if (funcs.test(word)) return "builtin";
+        if (preds.test(word)) return "def";
+        if (keywords.test(word)) return "keyword";
         return "variable";
       }
     };
@@ -62,8 +64,9 @@
     var preds = wordRegexp(["all", "and", "any", "has", "in", "none", "not", "or", "single", "xor"]);
     var keywords = wordRegexp(["as", "asc", "ascending", "assert", "by", "case", "commit", "constraint", "create", "csv", "cypher", "delete", "desc", "descending", "distinct", "drop", "else", "end", "explain", "false", "fieldterminator", "foreach", "from", "headers", "in", "index", "is", "limit", "load", "match", "merge", "null", "on", "optional", "order", "periodic", "profile", "remove", "return", "scan", "set", "skip", "start", "then", "true", "union", "unique", "unwind", "using", "when", "where", "with"]);
     var operatorChars = /[*+\-<>=&|~%^]/;
+
     return {
-      startState: function() {
+      startState: function(/*base*/) {
         return {
           tokenize: tokenBase,
           context: null,
@@ -119,25 +122,25 @@
           }
         }
         var closing = context && firstChar === context.type;
-        if (!context)
-          return 0;
-        if (context.type === "keywords")
-          return CodeMirror.commands.newlineAndIndent;
-        if (context.align)
-          return context.col + (closing ? 0 : 1);
+        if (!context) return 0;
+        if (context.type === "keywords") return CodeMirror.commands.newlineAndIndent;
+        if (context.align) return context.col + (closing ? 0 : 1);
         return context.indent + (closing ? 0 : indentUnit);
       }
     };
   });
-  CodeMirror.modeExtensions["cypher"] = {autoFormatLineBreaks: function(text) {
-      var i,
-          lines,
-          reProcessedPortion;
+
+  CodeMirror.modeExtensions["cypher"] = {
+    autoFormatLineBreaks: function(text) {
+      var i, lines, reProcessedPortion;
       var lines = text.split("\n");
       var reProcessedPortion = /\s+\b(return|where|order by|match|with|skip|limit|create|delete|set)\b\s/g;
       for (var i = 0; i < lines.length; i++)
         lines[i] = lines[i].replace(reProcessedPortion, " \n$1 ").trim();
       return lines.join("\n");
-    }};
+    }
+  };
+
   CodeMirror.defineMIME("application/x-cypher-query", "cypher");
+
 });

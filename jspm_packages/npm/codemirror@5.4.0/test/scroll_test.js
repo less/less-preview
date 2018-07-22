@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 (function() {
   "use strict";
 

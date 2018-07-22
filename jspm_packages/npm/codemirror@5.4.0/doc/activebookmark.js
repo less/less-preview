@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 // Kludge in HTML5 tag recognition in IE8
 document.createElement("section");
 document.createElement("article");

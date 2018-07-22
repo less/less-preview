@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 namespace = "comment_";
 
 (function() {

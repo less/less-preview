@@ -1,4 +1,3 @@
-/* */ 
 var blint = require("blint");
 
 ["mode", "lib", "addon", "keymap"].forEach(function(dir) {

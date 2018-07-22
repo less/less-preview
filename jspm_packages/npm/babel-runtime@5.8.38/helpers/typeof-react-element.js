@@ -1,4 +1,3 @@
-/* */ 
 "use strict";
 
 var _Symbol = require("babel-runtime/core-js/symbol")["default"];

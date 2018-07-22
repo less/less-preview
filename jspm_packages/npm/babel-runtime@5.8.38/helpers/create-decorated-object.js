@@ -1,8 +1,10 @@
-/* */ 
 "use strict";
-var _Object$defineProperty = require('../core-js/object/define-property')["default"];
-exports["default"] = function(descriptors) {
+
+var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
+
+exports["default"] = function (descriptors) {
   var target = {};
+
   for (var i = 0; i < descriptors.length; i++) {
     var descriptor = descriptors[i];
     var decorators = descriptor.decorators;
@@ -11,11 +13,12 @@ exports["default"] = function(descriptors) {
     delete descriptor.decorators;
     descriptor.enumerable = true;
     descriptor.configurable = true;
-    if ("value" in descriptor || descriptor.initializer)
-      descriptor.writable = true;
+    if ("value" in descriptor || descriptor.initializer) descriptor.writable = true;
+
     if (decorators) {
       for (var f = 0; f < decorators.length; f++) {
         var decorator = decorators[f];
+
         if (typeof decorator === "function") {
           descriptor = decorator(target, key, descriptor) || descriptor;
         } else {
@@ -23,11 +26,15 @@ exports["default"] = function(descriptors) {
         }
       }
     }
+
     if (descriptor.initializer) {
       descriptor.value = descriptor.initializer.call(target);
     }
+
     _Object$defineProperty(target, key, descriptor);
   }
+
   return target;
 };
+
 exports.__esModule = true;

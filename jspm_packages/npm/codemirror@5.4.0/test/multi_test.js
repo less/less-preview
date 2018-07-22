@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 (function() {
   namespace = "multi_";
 

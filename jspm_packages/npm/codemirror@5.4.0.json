@@ -1,0 +1,10 @@
+{
+  "main": "lib/codemirror.js",
+  "meta": {
+    "lib/codemirror.js.js": {
+      "exports": "CodeMirror",
+      "format": "global"
+    }
+  },
+  "format": "cjs"
+}

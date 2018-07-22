@@ -17,7 +17,7 @@ gulp.task('bundle-copy', function () {
 });
 
 gulp.task('bundle-post-revert', function(callback) {
-  exec('git checkout -- config.js index.html', function (err, stdout, stderr) {
+  exec('git checkout -- jspm.config.js index.html', function (err, stdout, stderr) {
     console.log(stdout);
     console.error(stderr);
     callback();

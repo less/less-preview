@@ -1,2 +1,1 @@
-/* */ 
-module.exports = require('./set');
+module.exports = require("./set.js");

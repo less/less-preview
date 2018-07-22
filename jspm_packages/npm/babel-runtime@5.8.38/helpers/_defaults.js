@@ -1,2 +1,1 @@
-/* */ 
-module.exports = require('./defaults');
+module.exports = require("./defaults.js");

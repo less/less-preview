@@ -1,14 +1,16 @@
-/* */ 
-"format cjs";
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
 (function(mod) {
-  if (typeof exports == "object" && typeof module == "object")
-    mod(require('../../lib/codemirror'));
-  else if (typeof define == "function" && define.amd)
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
     define(["../../lib/codemirror"], mod);
-  else
+  else // Plain browser env
     mod(CodeMirror);
 })(function(CodeMirror) {
   "use strict";
+
   CodeMirror.defineOption("selectionPointer", false, function(cm, val) {
     var data = cm.state.selectionPointer;
     if (data) {
@@ -23,18 +25,11 @@
     if (val) {
       data = cm.state.selectionPointer = {
         value: typeof val == "string" ? val : "default",
-        mousemove: function(event) {
-          mousemove(cm, event);
-        },
-        mouseout: function(event) {
-          mouseout(cm, event);
-        },
-        windowScroll: function() {
-          reset(cm);
-        },
+        mousemove: function(event) { mousemove(cm, event); },
+        mouseout: function(event) { mouseout(cm, event); },
+        windowScroll: function() { reset(cm); },
         rects: null,
-        mouseX: null,
-        mouseY: null,
+        mouseX: null, mouseY: null,
         willUpdate: false
       };
       CodeMirror.on(cm.getWrapperElement(), "mousemove", data.mousemove);
@@ -44,6 +39,7 @@
       cm.on("scroll", reset);
     }
   });
+
   function mousemove(cm, event) {
     var data = cm.state.selectionPointer;
     if (event.buttons == null ? event.which : event.buttons) {
@@ -54,6 +50,7 @@
     }
     scheduleUpdate(cm);
   }
+
   function mouseout(cm, event) {
     if (!cm.getWrapperElement().contains(event.relatedTarget)) {
       var data = cm.state.selectionPointer;
@@ -61,10 +58,12 @@
       scheduleUpdate(cm);
     }
   }
+
   function reset(cm) {
     cm.state.selectionPointer.rects = null;
     scheduleUpdate(cm);
   }
+
   function scheduleUpdate(cm) {
     if (!cm.state.selectionPointer.willUpdate) {
       cm.state.selectionPointer.willUpdate = true;
@@ -74,10 +73,10 @@
       }, 50);
     }
   }
+
   function update(cm) {
     var data = cm.state.selectionPointer;
-    if (!data)
-      return;
+    if (!data) return;
     if (data.rects == null && data.mouseX != null) {
       data.rects = [];
       if (cm.somethingSelected()) {
@@ -86,12 +85,12 @@
       }
     }
     var inside = false;
-    if (data.mouseX != null)
-      for (var i = 0; i < data.rects.length; i++) {
-        var rect = data.rects[i];
-        if (rect.left <= data.mouseX && rect.right >= data.mouseX && rect.top <= data.mouseY && rect.bottom >= data.mouseY)
-          inside = true;
-      }
+    if (data.mouseX != null) for (var i = 0; i < data.rects.length; i++) {
+      var rect = data.rects[i];
+      if (rect.left <= data.mouseX && rect.right >= data.mouseX &&
+          rect.top <= data.mouseY && rect.bottom >= data.mouseY)
+        inside = true;
+    }
     var cursor = inside ? data.value : "";
     if (cm.display.lineDiv.style.cursor != cursor)
       cm.display.lineDiv.style.cursor = cursor;

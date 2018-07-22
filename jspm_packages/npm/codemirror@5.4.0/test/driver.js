@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 var tests = [], filters = [], allNames = [];
 
 function Failure(why) {this.message = why;}

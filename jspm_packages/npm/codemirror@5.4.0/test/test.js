@@ -1,5 +1,3 @@
-/* */ 
-"format cjs";
 var Pos = CodeMirror.Pos;
 
 CodeMirror.defaults.rtlMoveVisually = true;

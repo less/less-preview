@@ -1,0 +1,55 @@
+{
+  "main": "index.js",
+  "format": "cjs",
+  "meta": {
+    "*": {
+      "globals": {
+        "process": "process"
+      }
+    },
+    "*.json": {
+      "format": "json"
+    }
+  },
+  "map": {
+    "./build": "./build/index.js",
+    "./core": "./core/index.js",
+    "./es5": "./es5/index.js",
+    "./es6": "./es6/index.js",
+    "./es7": "./es7/index.js",
+    "./fn/array": "./fn/array/index.js",
+    "./fn/date": "./fn/date/index.js",
+    "./fn/function": "./fn/function/index.js",
+    "./fn/html-collection": "./fn/html-collection/index.js",
+    "./fn/math": "./fn/math/index.js",
+    "./fn/node-list": "./fn/node-list/index.js",
+    "./fn/number": "./fn/number/index.js",
+    "./fn/object": "./fn/object/index.js",
+    "./fn/reflect": "./fn/reflect/index.js",
+    "./fn/regexp": "./fn/regexp/index.js",
+    "./fn/string": "./fn/string/index.js",
+    "./fn/symbol": "./fn/symbol/index.js",
+    "./js": "./js/index.js",
+    "./library": "./library/index.js",
+    "./library/core": "./library/core/index.js",
+    "./library/es5": "./library/es5/index.js",
+    "./library/es6": "./library/es6/index.js",
+    "./library/es7": "./library/es7/index.js",
+    "./library/fn/array": "./library/fn/array/index.js",
+    "./library/fn/date": "./library/fn/date/index.js",
+    "./library/fn/function": "./library/fn/function/index.js",
+    "./library/fn/html-collection": "./library/fn/html-collection/index.js",
+    "./library/fn/math": "./library/fn/math/index.js",
+    "./library/fn/node-list": "./library/fn/node-list/index.js",
+    "./library/fn/number": "./library/fn/number/index.js",
+    "./library/fn/object": "./library/fn/object/index.js",
+    "./library/fn/reflect": "./library/fn/reflect/index.js",
+    "./library/fn/regexp": "./library/fn/regexp/index.js",
+    "./library/fn/string": "./library/fn/string/index.js",
+    "./library/fn/symbol": "./library/fn/symbol/index.js",
+    "./library/js": "./library/js/index.js",
+    "./library/web": "./library/web/index.js",
+    "./package": "./package.json",
+    "./web": "./web/index.js"
+  }
+}

@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "author": "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)",
-  "main": "dist/commonjs/index.js",
+  "main": "aurelia-skeleton-navigation.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/aurelia/skeleton-navigation"
@@ -44,7 +44,7 @@
     "jasmine-core": "^3.1.0",
     "jshint": "^2.9.5",
     "jshint-stylish": "^2.2.1",
-    "jspm": "^0.16.53",
+    "jspm": "^0.17.0-beta.47",
     "karma": "^2.0.4",
     "karma-babel-preprocessor": "^7.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -71,23 +71,74 @@
       "aurelia-templating-binding": "npm:aurelia-templating-binding@^1.4.3",
       "aurelia-templating-resources": "npm:aurelia-templating-resources@^1.7.1",
       "codemirror": "npm:codemirror@5.4.0",
-      "core-js": "npm:core-js@1.2.7",
       "polymer/mutationobservers": "github:googlearchive/MutationObservers@0.4.2"
     },
     "devDependencies": {
-      "babel": "npm:babel-core@^5.8.24",
-      "babel-runtime": "npm:babel-runtime@^5.8.24"
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.25"
+    },
+    "peerDependencies": {
+      "fs": "npm:jspm-nodelibs-fs@^0.2.0",
+      "path": "npm:jspm-nodelibs-path@^0.2.0",
+      "process": "npm:jspm-nodelibs-process@^0.2.0"
     },
     "overrides": {
-      "npm:codemirror@5.4.0": {
+      "github:twbs/bootstrap@3.3.4": {
+        "main": "js/bootstrap",
         "shim": {
-          "lib/codemirror.js": {
-            "exports": "CodeMirror"
+          "js/bootstrap": {
+            "deps": [
+              "jquery"
+            ],
+            "exports": "$"
+          }
+        },
+        "dependencies": {
+          "jquery": "*"
+        },
+        "files": [
+          "dist",
+          "fonts",
+          "js",
+          "css",
+          "less",
+          "grunt",
+          "LICENSE"
+        ],
+        "systemjs": {
+          "main": "dist/js/bootstrap.js",
+          "modules": {
+            "dist/js/bootstrap.js": {
+              "deps": [
+                "jquery"
+              ],
+              "exports": "$"
+            }
           }
         }
       },
-      "npm:core-js@1.2.7": {
-        "main": "client/shim.min"
+      "npm:babel-runtime@5.8.38": {
+        "main": false,
+        "dependencies": {},
+        "optionalDependencies": {
+          "core-js": "^1.2.0"
+        }
+      },
+      "npm:codemirror@5.4.0": {
+        "meta": {
+          "lib/codemirror.js.js": {
+            "exports": "CodeMirror",
+            "format": "global"
+          }
+        }
+      },
+      "npm:font-awesome@4.3.0": {
+        "main": "css/font-awesome.css!",
+        "jspmNodeConversion": false,
+        "registry": "jspm",
+        "dependencies": {
+          "css": "0.1"
+        }
       }
     }
   },

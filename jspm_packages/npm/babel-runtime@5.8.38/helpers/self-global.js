@@ -1,4 +1,3 @@
-/* */ 
 "use strict";
 
 exports["default"] = typeof global === "undefined" ? self : global;

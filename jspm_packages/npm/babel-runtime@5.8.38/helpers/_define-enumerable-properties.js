@@ -1,2 +1,1 @@
-/* */ 
-module.exports = require('./defineEnumerableProperties');
+module.exports = require("./defineEnumerableProperties.js");
