@@ -7,6 +7,10 @@ module.exports = {
     dir: 'docs'
   },
 
+  router: {
+    base: '/less-preview/'
+  },
+
   /*
   ** Headers of the page
   */
