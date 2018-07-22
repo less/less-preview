@@ -1,7 +1,14 @@
+# dependencies
 node_modules
-/jspm_packages
-bower_components
+
+# logs
+npm-debug.log
+
+# Nuxt build
+.nuxt
+
+# Nuxt generate
+dist
+
+# IDE
 .idea
-.DS_STORE
-/dist
-build/reports
