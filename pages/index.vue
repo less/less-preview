@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="titlebar">
-      <div class="title">Less Preview</div>
+      <div class="title">Less-To-CSS Playground</div>
     </header>
     <section :class="{container: true, 'has-error': errorMessage, 'refresh': updateStyle}">
       <div class="editor">
@@ -135,6 +135,7 @@ body {
 .titlebar {
   background: lighten(@base, 5);
   height: 40px;
+  border: 1px solid hsla(210, 20%, 10%, 0.5);
 }
 .container {
   height: calc(100vh - 40px);
@@ -171,6 +172,7 @@ body {
 }
 .editor {
   width: calc(50vw - 12px);
+  border: 1px solid hsl(190, 10%, 50%);
 }
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
