@@ -9,7 +9,7 @@
           v-model="input"
           @init="editorInit"
           lang="less"
-          theme="tomorrow_night"
+          theme="crunch-dark"
           :options="{
             useSoftTabs: true,
             tabSize: 2
@@ -21,7 +21,7 @@
           v-model="output"
           @init="editorInit"
           lang="less"
-          theme="tomorrow_night"
+          theme="crunch-dark"
           :options="{
             useSoftTabs: true,
             tabSize: 2,
@@ -97,7 +97,7 @@ export default {
     editorInit: function () {
       require('brace/ext/language_tools') //language extension prerequsite...
       require('brace/mode/less')
-      require('brace/theme/tomorrow_night')
+      require('./theme-crunch-dark')
     }
   },
   components: {
