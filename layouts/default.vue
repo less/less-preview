@@ -1,7 +1,7 @@
 <template>
   <div>
     <nuxt/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.7.1/less.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/less@3"></script>
   </div>
 </template>
 
