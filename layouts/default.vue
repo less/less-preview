@@ -1,7 +1,8 @@
 <template>
   <div>
     <nuxt/>
-    <script src="https://cdn.jsdelivr.net/npm/less@3"></script>
+    <!-- load latest version asap -->
+    <script data-less-latest src="https://cdn.jsdelivr.net/npm/less@latest"></script>
   </div>
 </template>
 
