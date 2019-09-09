@@ -168,11 +168,7 @@ export default {
   },
   watch: {
     input(newInput) {
-      if (typeof newInput === 'string') {
-        updateVue(this, newInput)
-      } else {
-        console.warn(newInput);
-      }
+      updateVue(this, newInput)
     },
     version(newVersion) {
       const version = this.versions.find(version => version.semver === newVersion);
@@ -187,6 +183,7 @@ export default {
         }
         loadScriptAsync(baseUrl + suffix).then(() => {
           version.compiler = window.less;
+          // `less@1.x.x` had a different API, so we mimic the new API so this page keeps working
           if (is_1_x_x) {
             const compiler = window.less;
             const parser = compiler.Parser();
