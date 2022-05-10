@@ -1,7 +1,6 @@
 <template>
   <div>
     <nuxt/>
-    <script src="https://cdn.jsdelivr.net/npm/less@3"></script>
   </div>
 </template>
 
