@@ -2,6 +2,18 @@
   <div>
     <header class="titlebar">
       <div class="title">Less-To-CSS Playground</div>
+      <transition name="fade">
+         <div v-if="showTipFlag" class="version-select-tips">
+          <div v-if="versionSelectFail" class="version-select-tips-error">
+            <span class="iconfont">&#xe62f;</span>
+            Failed to load this version 
+          </div>
+          <div v-else class="version-select-tips-success">
+            <span class="iconfont">&#xe679;</span>
+            Successfully switched version: {{ version }}
+          </div>
+        </div>
+      </transition>
       <div class="version-select">
         Version: 
         <div class="version-select-click" @click.stop @click="toggle">
@@ -126,6 +138,8 @@ export default {
       Url,
       version:'',
       options: [],
+      showTipFlag: false,
+      versionSelectFail: false
     }
   },
   methods: {
@@ -139,6 +153,13 @@ export default {
       require('brace/ext/language_tools') //language extension prerequsite...
       require('brace/mode/less')
       require('./theme-crunch-dark')
+    },
+    showTip: function() {
+      this.showTipFlag = true
+      setTimeout(()=>{
+        this.versionSelectFail = false
+        this.showTipFlag = false
+      },2000)
     }
   },
   components: {
@@ -160,9 +181,12 @@ export default {
     },
     version(newVersion) {
       this.Url = this.baseVersionUrl + newVersion
+      let firstLoad = false
       const scriptDom = document.getElementById("lessScript")
       if (scriptDom) {
         scriptDom.parentNode.removeChild(scriptDom)
+      } else {
+        firstLoad = true
       }
       const newScript = document.createElement("script")
       newScript.src = this.Url;
@@ -177,12 +201,25 @@ export default {
             || newScript.readyState == "loaded"
           ) {
             newScript.onreadystatechange = null
+            if(!firstLoad) {
+              this.showTip()
+            }
             updateVue(this, this.input)
           }
         };
       } else {
         newScript.onload = () => {
+          if(!firstLoad) {
+              this.versionSelectFail = false
+              this.showTip()
+          }
           updateVue(this, this.input)
+        }
+        newScript.onerror = () =>{
+          if(!firstLoad) {
+              this.versionSelectFail = true
+              this.showTip()
+          }
         }
       }
     }
@@ -206,6 +243,10 @@ export default {
 </script>
 
 <style lang="less">
+@font-face {
+  font-family: 'iconfont';
+  src: url('../assets/iconfont.ttf') format('truetype');
+}
 html, body {
   margin: 0;
 }
@@ -219,8 +260,10 @@ body {
 .titlebar {
   position: relative;
   background: lighten(@base, 5);
-  height: 40px;
   border: 1px solid hsla(210, 20%, 10%, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .container {
   height: calc(100vh - 40px);
@@ -237,12 +280,38 @@ body {
     -webkit-text-stroke: 0.1px transparent;
   }
 }
+.version-select-tips {
+  width: 450px;
+  z-index: 100;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  display: block;
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin-top: 6px;
+
+  line-height: 18px;
+
+}
+.version-select-tips-error{
+  width: 100%;
+  height: 100%;
+  padding: 6px 16px;
+  border-radius: 3px;
+  color: #F26B6E;
+  background-color: #FEF0F0;
+}
+.version-select-tips-success {
+  width: 100%;
+  height: 100%;
+  padding: 6px 16px;
+  border-radius: 3px;
+  color: #6bc247;
+  background-color: #e2f3d9;
+}
+
 .version-select{
-  position: absolute;
-  right: 200px;
-  top: 30%;
-  transform: translateY(-50%);
-  width: 10rem;
+  width: 20rem;
   z-index: 100;
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
@@ -250,12 +319,19 @@ body {
   font-size: 18px;
   color: white;
   letter-spacing: 1px;
-  padding: 8px 16px;
+  padding: 4px 10px;
   height: 25px;
   line-height: 25px;
 }
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .version-select-click {
-  position: absolute;
+  position: relative;
   color: black;
   background-color: #e6e8eb;
   display: inline-block;
@@ -335,7 +411,6 @@ body {
 }
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
   font-weight: 300;
   font-size: 18px;
   color: white;
