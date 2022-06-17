@@ -2,6 +2,31 @@
   <div>
     <header class="titlebar">
       <div class="title">Less-To-CSS Playground</div>
+      <transition name="fade">
+         <div v-if="showTipFlag" class="version-select-tips">
+          <div v-if="versionSelectFail" class="version-select-tips-error">
+            <span class="iconfont">&#xe62f;</span>
+            Failed to load this version 
+          </div>
+          <div v-else class="version-select-tips-success">
+            <span class="iconfont">&#xe679;</span>
+            Successfully switched version: {{ version }}
+          </div>
+        </div>
+      </transition>
+       <div class="version-select">
+        Version: 
+        <div class="version-select-click" @click.stop @click="toggle">
+          <span class="active-version">
+            {{ version }}
+          </span>
+          <ul v-if="expanded" class="versions">
+            <li v-for="(item, index) in options" :key='index'>
+              <a @click="setVersion(item)">{{ item }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </header>
     <section :class="{container: true, 'has-error': errorMessage, 'refresh': updateStyle}">
       <div class="editor">
@@ -43,7 +68,8 @@ import { nextTick } from 'vue'
 import { VAceEditor } from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-less';
-import './theme-crunch-dark'
+import './theme-crunch-dark';
+import axios from 'axios';
 
 function updateVue(self, newInput) {
   let interval
@@ -70,8 +96,12 @@ function updateVue(self, newInput) {
 
 export default {
   data() {
+    const baseVersionUrl = "https://cdn.jsdelivr.net/npm/less@"
+    const defaultVersion = "4"
+    let Url = baseVersionUrl + defaultVersion
     return {
       updateStyle: false,
+      expanded: false,
       input: 
 `#lib() {
   .colors() {
@@ -95,11 +125,33 @@ export default {
   }
 }`,
       output: '',
-      errorMessage: ''
+      errorMessage: '',
+      networkErrorMessage: "",
+      versions: [],
+      baseVersionUrl,
+      defaultVersion,
+      Url,
+      version:'',
+      options: [],
+      showTipFlag: false,
+      versionSelectFail: false
     }
   },
   methods: {
+    toggle: function() {
+      this.expanded= !this.expanded
+    },
+    setVersion: function(version) {
+      this.version = version
+    },
     editorInit: function () {
+    },
+    showTip: function() {
+      this.showTipFlag = true
+      setTimeout(()=>{
+        this.versionSelectFail = false
+        this.showTipFlag = false
+      },2000)
     }
   },
   components: {
@@ -118,12 +170,57 @@ export default {
   watch: {
     input(newInput) {
       updateVue(this, newInput)
+    },
+    version(newVersion) {
+      this.Url = this.baseVersionUrl + newVersion
+      let firstLoad = false
+      const scriptDom = document.getElementById("lessScript")
+      if (scriptDom) {
+        scriptDom.parentNode.removeChild(scriptDom)
+      } else {
+        firstLoad = true
+      }
+      const newScript = document.createElement("script")
+      newScript.src = this.Url;
+      newScript.id = "lessScript"
+      document.body.appendChild(newScript)
+
+      newScript.onload = () => {
+        if(!firstLoad) {
+            this.versionSelectFail = false
+            this.showTip()
+        }
+        updateVue(this, this.input)
+      }
+      newScript.onerror = () =>{
+        if(!firstLoad) {
+            this.versionSelectFail = true
+            this.showTip()
+        }
+      }
     }
-  }
+  },
+  created: async function() {
+    let { data } = await axios.get(
+      `https://data.jsdelivr.com/v1/package/npm/less`
+    )
+    if (!data) {
+      let networkErrorMessage = "NetworkError, less versions can't find"
+      return { networkErrorMessage }
+    }
+    this.versions = data.versions
+    this.version = this.versions[0]
+    this.options = this.versions
+    this.Url = this.baseVersionUrl + this.version
+  },
 }
 </script>
 
 <style lang="less">
+@font-face {
+  font-family: 'iconfont';
+  src: url('./assets/iconfont.ttf') format('truetype');
+}
 html, body {
   margin: 0;
 }
@@ -138,6 +235,9 @@ body {
   background: lighten(@base, 5);
   height: 40px;
   border: 1px solid hsla(210, 20%, 10%, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .container {
   height: calc(100vh - 40px);
@@ -153,6 +253,112 @@ body {
     text-indent: 0.1px;
     -webkit-text-stroke: 0.1px transparent;
   }
+}
+.version-select-tips {
+  width: 450px;
+  z-index: 100;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  display: block;
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin-top: 6px;
+
+  line-height: 18px;
+
+}
+.version-select-tips-error{
+  width: 100%;
+  height: 100%;
+  padding: 6px 16px;
+  border-radius: 3px;
+  color: #F26B6E;
+  background-color: #FEF0F0;
+}
+.version-select-tips-success {
+  width: 100%;
+  height: 100%;
+  padding: 6px 16px;
+  border-radius: 3px;
+  color: #6bc247;
+  background-color: #e2f3d9;
+}
+
+.version-select{
+  width: 20rem;
+  z-index: 100;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  display: block;
+  font-weight: 300;
+  font-size: 18px;
+  color: white;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  height: 25px;
+  line-height: 25px;
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.version-select-click {
+  position: relative;
+  color: black;
+  background-color: #e6e8eb;
+  display: inline-block;
+  margin-right: 12px;
+  width: 200px;
+  height: 25px;
+  line-height: 25px;
+}
+.active-version {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  line-height: 25px;
+  padding-left: 5px;
+}
+.active-version:after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid #aaa;
+  position: absolute;
+  right: 2px;
+  top: 6px;
+}
+
+.versions {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  list-style-type: none;
+  padding: 8px;
+  margin: 0;
+  width: 200px;
+  max-height: calc(100vh - 70px);
+  overflow: scroll;
+  background-color: #e6e8eb;
+}
+.versions a {
+  display: block;
+  padding: 6px 12px;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--base);
+}
+.versions a:hover {
+  color: #3ca877;
 }
 @keyframes opac {
   0% {
@@ -178,7 +384,6 @@ body {
 }
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
   font-weight: 300;
   font-size: 18px;
   color: white;
