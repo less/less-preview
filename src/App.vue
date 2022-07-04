@@ -1,18 +1,3 @@
-<template>
-  <Header @updateVue="updateVue" :store="store" />
-  <Layout>
-    <template #edit>
-      <editor v-model:value="input" />
-    </template>
-    <template #preview>
-      <editor v-model:value="output" readOnly />
-    </template>
-  </Layout>
-  <div v-if="errorMessage" class="error">
-    {{ errorMessage }}
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { nextTick, onMounted, reactive, watch } from 'vue'
 import { utoa, atou, LESS_DATA } from './utils'
@@ -26,7 +11,7 @@ let errorMessage = $ref('')
 let hash = $ref('')
 let store = reactive({ activeVersion: '4.x' })
 
-let updateWithLessInterval = setInterval(() => { }, 100)
+let updateWithLessInterval = setInterval(() => {}, 100)
 
 const serialize = () => {
   const newHash = '#' + utoa(JSON.stringify({
@@ -83,7 +68,22 @@ onMounted(() => {
 })
 
 </script>
-
+<template>
+  <Header @updateVue="updateVue" :store="store"/>
+  <Layout>
+    <template #edit>
+      <editor v-model:value="input" />
+    </template>
+    <template #preview>
+      <editor v-model:value="output" readOnly />
+    </template>
+    <template #footer>
+      <div v-if="errorMessage" class="error">
+        {{ errorMessage }}
+      </div>
+    </template>
+  </Layout>
+</template>
 <style lang="less">
 html,
 body {

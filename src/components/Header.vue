@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 
 const props = defineProps(["store"]);
 const { store } = props;
@@ -8,7 +8,6 @@ const { store } = props;
 const baseVersionUrl = "https://cdn.jsdelivr.net/npm/less@";
 const activeVersion = ref("");
 const publishedVersions = ref<string[]>();
-const options = ref<string[]>();
 const expanded = ref(false);
 const showTipFlag = ref(false);
 const versionSelectFail = ref(false);
