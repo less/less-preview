@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import axios from "axios";
-import { ref } from "vue";
-
 const props = defineProps(["store"]);
 const { store } = props;
 
 const baseVersionUrl = "https://cdn.jsdelivr.net/npm/less@";
-const activeVersion = ref("");
-const publishedVersions = ref<string[]>();
-const expanded = ref(false);
-const showTipFlag = ref(false);
-const versionSelectFail = ref(false);
-const emit = defineEmits(["updateVue"]);
+let activeVersion = $ref("");
+let publishedVersions = $ref<string[]>();
+let expanded = $ref(false);
+let showTipFlag = $ref(false);
+let versionSelectFail = $ref(false);
+const emit = defineEmits(["updateVue", 'upLoadingLessJS']);
 
 async function fetchVersions() {
   let { data } = await axios.get(
@@ -21,17 +19,18 @@ async function fetchVersions() {
     let networkErrorMessage = "NetworkError, less versions can't find";
     return { networkErrorMessage };
   }
-  publishedVersions.value = data.versions;
-  if (!store.activeVersion) {
-    activeVersion.value = publishedVersions.value[0];
-    store.activeVersion = activeVersion.value;
+  publishedVersions = data.versions;
+  if (!store.activeVersion|| store.activeVersion==='4.x') {
+    activeVersion = publishedVersions[0];
+    store.activeVersion = activeVersion;
   } else {
-    activeVersion.value = store.activeVersion;
+    activeVersion = store.activeVersion;
   }
 }
 
 function fetchLess() {
-  const url = baseVersionUrl + activeVersion.value;
+  emit("upLoadingLessJS");
+  const url = baseVersionUrl + activeVersion;
   let firstLoad = false;
   const scriptDom = document.getElementById("lessScript");
   if (scriptDom) {
@@ -46,33 +45,34 @@ function fetchLess() {
 
   newScript.onload = () => {
     if (!firstLoad) {
-      versionSelectFail.value = false;
+      versionSelectFail = false;
       showTip();
     }
     emit("updateVue");
+    emit("upLoadingLessJS");
   };
   newScript.onerror = () => {
     if (!firstLoad) {
-      versionSelectFail.value = true;
+      versionSelectFail = true;
       showTip();
     }
   };
 }
 
 function showTip() {
-  showTipFlag.value = true;
+  showTipFlag = true;
   setTimeout(() => {
-    versionSelectFail.value = false;
-    showTipFlag.value = false;
+    versionSelectFail = false;
+    showTipFlag = false;
   }, 2000);
 }
 
 async function toggle() {
-  expanded.value = !expanded.value;
+  expanded = !expanded;
 }
 
 async function setLessVersion(v: string) {
-  activeVersion.value = v;
+  activeVersion = v;
   store.activeVersion = v;
   fetchLess();
 }

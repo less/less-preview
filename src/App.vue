@@ -10,8 +10,7 @@ let output = $ref<string | undefined>('')
 let errorMessage = $ref('')
 let hash = $ref('')
 let store = reactive({ activeVersion: '4.x' })
-
-let updateWithLessInterval = setInterval(() => {}, 100)
+let loadingLessJS = $ref(false)
 
 const serialize = () => {
   const newHash = '#' + utoa(JSON.stringify({
@@ -21,11 +20,8 @@ const serialize = () => {
   history.replaceState({}, '', newHash)
 }
 
-const updateWithLess = () => {
-  if (window.less) {
-    clearInterval(updateWithLessInterval)
-    serialize()
-    window.less.render(input, {}, (error, result) => {
+const updateVue = () => {
+  window.less.render(input, {}, (error, result) => {
       if (error) {
         errorMessage = error.message
         output = ''
@@ -34,15 +30,9 @@ const updateWithLess = () => {
         output = result?.css
       }
     })
-  }
 }
-
-const updateVue = () => {
-  if (!window.less) {
-    updateWithLessInterval = setInterval(updateWithLess, 100)
-  } else {
-    updateWithLess()
-  }
+const upLoadingLessJS = () =>{
+  loadingLessJS = !loadingLessJS
 }
 
 hash = location.hash.slice(1)
@@ -69,8 +59,8 @@ onMounted(() => {
 
 </script>
 <template>
-  <Header @updateVue="updateVue" :store="store"/>
-  <Layout>
+  <Header @updateVue="updateVue" :store="store" @upLoadingLessJS="upLoadingLessJS"/>
+  <Layout :loadingLessJS="loadingLessJS">
     <template #edit>
       <editor v-model:value="input" />
     </template>
