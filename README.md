@@ -6,17 +6,12 @@
 
 ``` bash
 # install dependencies
-$ npm install
+$ pnpm install
 
-# serve with hot reload at localhost:3000/less-preview/
-$ npm run dev
+# serve with hot reload at localhost:3000
+$ pnpm dev
 
 # build for production and launch server
-$ npm run build
-$ npm start
-
-# generate Less Preview site
-$ npm run generate
+$ pnpm build
+$ pnpm preview
 ```
-
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).

@@ -5,24 +5,36 @@
   "author": "Matthew Dean",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "precommit": "npm run lint"
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "eslint",
+      "prettier --parser=typescript --write"
+    ]
   },
   "dependencies": {
-    "nuxt": "^1.0.0"
+    "@codemirror/lang-css": "^6.0.0",
+    "@codemirror/theme-one-dark": "^6.0.0",
+    "axios": "^0.26.1",
+    "codemirror": "^6.0.0",
+    "vue": "^3.2.25"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "cross-env": "^5.0.1",
-    "eslint": "^5.0.1",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-vue": "^4.0.0",
+    "@types/less": "^3.0.3",
+    "@types/node": "^16.11.12",
+    "@vitejs/plugin-vue": "^2.3.3",
     "less": "^3.7.1",
-    "less-loader": "^4.1.0",
-    "vue2-ace-editor": "0.0.11"
+    "typescript": "^4.5.4",
+    "vite": "^2.9.9",
+    "vue-tsc": "^0.34.7"
   }
 }
