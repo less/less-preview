@@ -31,7 +31,6 @@
 }
 .body {
   overflow: hidden;
-  height: inherit;
   display: flex;
   justify-content: space-evenly;
   align-items: stretch;

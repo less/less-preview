@@ -31,6 +31,7 @@ const updateVue = () => {
       }
     })
 }
+
 const upLoadingLessJS = () =>{
   loadingLessJS = !loadingLessJS
 }

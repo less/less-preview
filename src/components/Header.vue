@@ -34,7 +34,7 @@ function fetchLess() {
   let firstLoad = false;
   const scriptDom = document.getElementById("lessScript");
   if (scriptDom) {
-    scriptDom.parentNode.removeChild(scriptDom);
+    scriptDom.parentNode?.removeChild(scriptDom);
   } else {
     firstLoad = true;
   }
