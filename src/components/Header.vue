@@ -10,6 +10,7 @@ let expanded = $ref(false);
 let showTipFlag = $ref(false);
 let versionSelectFail = $ref(false);
 const emit = defineEmits(["updateVue", 'upLoadingLessJS']);
+let majorMinorSet = new Set<string>()
 
 async function fetchVersions() {
   let { data } = await axios.get(
@@ -19,8 +20,15 @@ async function fetchVersions() {
     let networkErrorMessage = "NetworkError, less versions can't find";
     return { networkErrorMessage };
   }
-  publishedVersions = data.versions.filter((v: string) => Number(v[0]) > 2 && !v.includes('-'));
-  if (!store.activeVersion|| store.activeVersion==='4.x') {
+  publishedVersions = data.versions.filter((v: string) => {
+    const majorMinor = v.match(/^\d+\.\d+/)?.[0] || '';
+    if (Number(majorMinor.charAt(0)) < 3 || majorMinorSet.has(majorMinor)) {
+      return false;
+    }
+    majorMinorSet.add(majorMinor);
+    return true
+  });
+  if (!store.activeVersion || store.activeVersion === '4.x' || !publishedVersions.includes(store.activeVersion)) {
     activeVersion = publishedVersions[0];
     store.activeVersion = activeVersion;
   } else {
@@ -108,6 +116,10 @@ init();
     <div class="toolbar">
       <div class="version-select">
         Version:
+        <!--
+          TODO - use a plain select box instead of this one which has
+          weird / non-standard behavior.
+        -->
         <div class="version-select-click" @click.stop @click="toggle">
           <span class="active-version">
             {{ activeVersion }}
