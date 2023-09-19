@@ -13,6 +13,9 @@
       <div class="editor">
         <slot name="preview"></slot>
       </div>
+      <section class="options">
+        <slot name="options"></slot>
+      </section>
     </body>
     <footer class="footer">
       <slot name="footer"></slot>
@@ -27,19 +30,51 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 6px 0;
 }
 .body {
   overflow: hidden;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: stretch;
   align-items: stretch;
+  gap: 6px;
+  padding: 6px;
   flex: 1;
 }
 
 .editor {
-  width: calc(50vw - 12px);
+  flex: 5;
   border: 1px solid hsl(190, 10%, 50%);
+}
+
+.options {
+  border: 1px solid hsl(190, 10%, 50%);
+  background: darken(#35495e, 5%);
+  flex: 2;
+  display: none;
+  color: #ddd;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  > * {
+    margin: 0;
+  }
+  @media (min-width: 1024px) {
+    display: flex;
+  }
+}
+
+label {
+  display: flex;
+  gap: 4px;
+  span {
+    flex: 1;
+  }
+  padding-bottom: 3px;
+}
+
+select {
+  width: 100%;
 }
 
 .footer {

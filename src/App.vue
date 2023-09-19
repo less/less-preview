@@ -9,19 +9,24 @@ let input = $ref(LESS_DATA)
 let output = $ref<string | undefined>('')
 let errorMessage = $ref('')
 let hash = $ref('')
-let store = reactive({ activeVersion: '4.x' })
+let store: Less.Options & { activeVersion: string } = reactive({
+  activeVersion: '4.x',
+  math: 'parens-division',
+  strictUnits: false
+})
 let loadingLessJS = $ref(false)
 
 const serialize = () => {
   const newHash = '#' + utoa(JSON.stringify({
     code: input,
-    activeVersion: store.activeVersion
+    ...store
   }))
   history.replaceState({}, '', newHash)
 }
 
 const updateVue = () => {
-  window.less.render(input, {}, (error, result) => {
+  const { math, strictUnits } = store
+  window.less.render(input, { math, strictUnits }, (error, result) => {
       if (error) {
         errorMessage = error.message
         output = ''
@@ -38,9 +43,9 @@ const upLoadingLessJS = () =>{
 
 hash = location.hash.slice(1)
 if (hash) {
-  const saved = JSON.parse(atou(hash))
-  input = saved.code
-  store = saved
+  const { code, ...rest } = JSON.parse(atou(hash))
+  input = code
+  Object.assign(store, rest)
 } else {
   serialize()
 }
@@ -50,6 +55,10 @@ watch(() => input, () => {
   if (hash !== '') {
     serialize()
   }
+})
+watch(store, () => {
+  updateVue()
+  serialize()
 })
 
 onMounted(() => {
@@ -65,6 +74,23 @@ onMounted(() => {
     <template #edit>
       <editor v-model:value="input" />
     </template>
+    <template #options>
+      <h3>Options</h3>
+      <div>
+        <label>Math mode</label>
+        <select v-model="store.math">
+          <option>always</option>
+          <option>parens-division</option>
+          <option>parens</option>
+        </select>
+      </div>
+      
+      <label>
+        <input type="checkbox" v-model="store.strictUnits" />
+        <span>Strict units</span>
+      </label>
+      
+    </template>
     <template #preview>
       <editor v-model:value="output" readOnly />
     </template>
@@ -79,6 +105,7 @@ onMounted(() => {
 html,
 body {
   margin: 0;
+  font-family: system-ui, sans-serif;
 }
 
 @base: #35495e;

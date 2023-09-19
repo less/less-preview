@@ -19,7 +19,7 @@ async function fetchVersions() {
     let networkErrorMessage = "NetworkError, less versions can't find";
     return { networkErrorMessage };
   }
-  publishedVersions = data.versions;
+  publishedVersions = data.versions.filter((v: string) => Number(v[0]) > 2 && !v.includes('-'));
   if (!store.activeVersion|| store.activeVersion==='4.x') {
     activeVersion = publishedVersions[0];
     store.activeVersion = activeVersion;
