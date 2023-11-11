@@ -24,7 +24,7 @@
   "dependencies": {
     "@codemirror/lang-css": "^6.0.0",
     "@codemirror/theme-one-dark": "^6.0.0",
-    "axios": "^0.26.1",
+    "axios": "^1.6.0",
     "codemirror": "^6.0.0",
     "vue": "^3.2.25"
   },
