@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import axios from "axios";
+import Select from "./Select.vue";
 const props = defineProps(["store"]);
 const { store } = props;
 
 const baseVersionUrl = "https://cdn.jsdelivr.net/npm/less@";
 let activeVersion = $ref("");
 let publishedVersions = $ref<string[]>();
-let expanded = $ref(false);
 let showTipFlag = $ref(false);
 let versionSelectFail = $ref(false);
 const emit = defineEmits(["updateVue", 'upLoadingLessJS']);
 let majorMinorSet = new Set<string>()
+const versionLabel = (v: string) => v.includes("-") ? `${v} (experimental)` : v;
+const versionOptions = $computed(() =>
+  (publishedVersions ?? []).map((v) => ({ value: v, label: versionLabel(v) }))
+);
 
 async function fetchVersions() {
   let { data } = await axios.get(
@@ -104,10 +108,6 @@ function showTip() {
   }, 2000);
 }
 
-async function toggle() {
-  expanded = !expanded;
-}
-
 async function setLessVersion(v: string) {
   activeVersion = v;
   store.activeVersion = v;
@@ -144,26 +144,17 @@ init();
     </transition>
     <div class="toolbar">
       <div class="version-select">
-        Version:
-        <!--
-          TODO - use a plain select box instead of this one which has
-          weird / non-standard behavior.
-        -->
-        <div class="version-select-click" @click.stop @click="toggle">
-          <span class="active-version">
-            {{ activeVersion }}{{ activeVersion.includes("-") ? " (experimental)" : "" }}
-          </span>
-          <ul v-if="expanded" class="versions">
-            <li v-for="(item, index) in publishedVersions" :key="index">
-              <a @click="setLessVersion(item)">{{ item }}{{ item.includes("-") ? " (experimental)" : "" }}</a>
-            </li>
-          </ul>
-        </div>
+        <span>Version</span>
+        <Select
+          :modelValue="activeVersion"
+          :options="versionOptions"
+          @update:modelValue="setLessVersion"
+        />
       </div>
-      <button title="CopyLink" class="github button iconfont" @click="copyLink">
+      <button title="CopyLink" class="control button iconfont" @click="copyLink">
         &#xe616;
       </button>
-      <button title="Go to less-preview repo" class="github button">
+      <button title="Go to less-preview repo" class="control button">
         <a
           href="https://github.com/less/less-preview"
           target="_blank"
@@ -171,7 +162,7 @@ init();
           >&#xe885;
         </a>
       </button>
-      <button title="Go to less issue" class="github button">
+      <button title="Go to less issue" class="control button">
         <a
           href="https://github.com/less/less.js/issues"
           target="_blank"
@@ -184,193 +175,112 @@ init();
 </template>
 
 <style lang="less">
-@base: #35495e;
+@import (reference) "../theme.less";
 @font-face {
   font-family: "iconfont";
   src: url("../assets/iconfont.ttf") format("truetype");
 }
 .titlebar {
   position: relative;
+  z-index: 10;
   background: lighten(@base, 5);
   height: 40px;
-  border: 1px solid hsla(210, 20%, 10%, 0.5);
+  border: 1px solid @border;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  font-family: @font;
+  color: white;
   .logo {
-    position: absolute;
-    display: inline-block;
+    flex: none;
     width: 52.8px;
     height: 23.4px;
-    background-image: url("../assets/less_logo.png");
+    background: url("../assets/less_logo.png") no-repeat;
     background-size: 52.8px 23.4px;
-    background-repeat: no-repeat;
-    margin-left: 3px;
-    margin-top: 8px;
   }
 
   .title {
-    font-family: "Quicksand", "Source Sans Pro", -apple-system,
-      BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-      sans-serif; /* 1 */
+    flex: 1;
     font-weight: 300;
     font-size: 18px;
-    color: white;
     letter-spacing: 1px;
-    padding: 8px 16px;
-    margin-left: 54px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   @media (max-width: 720px) {
     .title {
       font-size: 0.8em;
     }
   }
-
   @media (max-width: 640px) {
     .title {
       display: none;
     }
+    .toolbar {
+      margin-left: auto;
+    }
   }
+
   .version-select-tips {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 450px;
-    z-index: 100;
-    font-family: "Quicksand", "Source Sans Pro", -apple-system,
-      BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-      sans-serif;
-    display: block;
-    font-weight: 300;
-    font-size: 18px;
-    letter-spacing: 1px;
-    margin-top: 6px;
-    line-height: 18px;
+    z-index: 300;
+    padding: 8px 16px;
+    border-radius: @radius;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     .version-select-tips-error {
-      width: 100%;
-      height: 100%;
-      padding: 6px 16px;
-      border-radius: 3px;
       color: #f26b6e;
-      background-color: #fef0f0;
     }
     .version-select-tips-success {
-      width: 100%;
-      height: 100%;
-      padding: 6px 16px;
-      border-radius: 3px;
-      color: #6bc247;
-      background-color: #e2f3d9;
+      color: @accent;
     }
-  }
-    @media (max-width: 560px) {
-    .toolbar {
-      font-size: 0.8em;
-    }
+    background: @panel;
+    border: 1px solid @border;
   }
 
-  @media (max-width: 640px) {
-    .toolbar {
-          margin-left:54PX;
-    }
-  }
   .toolbar {
-    width: 25rem;
-    z-index: 100;
-    font-family: "Quicksand", "Source Sans Pro", -apple-system,
-      BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-      sans-serif;
-    display: block;
-    font-weight: 300;
-    font-size: 18px;
-    color: white;
-    letter-spacing: 1px;
-    padding: 4px 10px;
-    height: 25px;
-    line-height: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
     .version-select {
-      display: inline-block;
-      cursor: default;
-      .version-select-click {
-        position: relative;
-        color: black;
-        background-color: #e6e8eb;
-        display: inline-block;
-        margin-right: 12px;
-        width: 200px;
-        height: 25px;
-        line-height: 25px;
-        .active-version {
-          cursor: pointer;
-          position: relative;
-          display: inline-block;
-          vertical-align: middle;
-          width: 100%;
-          line-height: 25px;
-          padding-left: 5px;
-          &:after {
-            content: "";
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 12px solid #aaa;
-            position: absolute;
-            right: 2px;
-            top: 6px;
-          }
-        }
-        .versions {
-          position: absolute;
-          left: 0;
-          top: 40px;
-          background-color: #fff;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          list-style-type: none;
-          padding: 8px;
-          margin: 0;
-          width: 200px;
-          max-height: calc(100vh - 70px);
-          overflow: scroll;
-          background-color: #e6e8eb;
-          a {
-            display: block;
-            padding: 6px 12px;
-            text-decoration: none;
-            cursor: pointer;
-            color: var(--base);
-            &:hover {
-              color: #3ca877;
-            }
-          }
-        }
-      }
-    }
-    .github {
-      a {
-        text-decoration: none;
-        color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      .select {
+        width: 14rem;
       }
     }
     .button {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      cursor: default;
-      margin-left: 1px;
-      margin-right: 2px;
-      text-decoration: none;
-      color: #fff;
-      background: none;
-      border: none;
-      text-align:center;
-      &:hover {
-        font-weight: 600;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      cursor: pointer;
+      a {
+        text-decoration: none;
+        color: inherit;
       }
     }
   }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 .iconfont {
   font-family: "iconfont" !important;

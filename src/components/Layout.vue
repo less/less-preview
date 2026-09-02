@@ -24,17 +24,17 @@
   </section>
 </template>
 <style lang="less">
+@import (reference) '../theme.less';
+
 .container {
   position: relative;
   height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
 }
 .body {
   overflow: hidden;
   display: flex;
-  justify-content: stretch;
   align-items: stretch;
   gap: 6px;
   padding: 6px;
@@ -43,17 +43,19 @@
 
 .editor {
   flex: 5;
-  border: 1px solid hsl(190, 10%, 50%);
+  min-width: 0;
+  border: 1px solid @border;
+  border-radius: @radius;
+  overflow: hidden;
 }
 
 .options {
-  border: 1px solid hsl(190, 10%, 50%);
-  background: darken(#35495e, 5%);
+  border: 1px solid @border;
+  border-radius: @radius;
+  background: @panel;
   flex: 2;
   display: none;
-  color: #ddd;
   padding: 12px;
-  display: flex;
   flex-direction: column;
   gap: 16px;
   > * {
@@ -64,49 +66,7 @@
   }
 }
 
-label {
-  display: flex;
-  gap: 4px;
-  span {
-    flex: 1;
-  }
-  padding-bottom: 3px;
-}
-
-select {
-  width: 100%;
-}
-
 .footer {
   width: 100%;
-}
-.loading {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #f2efef;
-  @keyframes identifier {
-    0%{
-      transform: rotate(0deg) ;
-    }
-    100%{
-      transform: rotate(360deg);
-    }
-  }
-  .loadingCircle{
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -5rem;
-    margin-top: -5rem;
-    width: 10rem;
-    height: 10rem;
-    border: 1px solid #91abe3;
-    border-left: 2px solid #91abe3;
-    border-radius: 50%;
-    animation: identifier 0.6s linear infinite forwards;
-  }
 }
 </style>
