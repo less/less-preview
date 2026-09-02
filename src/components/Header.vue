@@ -21,6 +21,12 @@ async function fetchVersions() {
     return { networkErrorMessage };
   }
   publishedVersions = data.versions.filter((v: string) => {
+    // Only offer stable releases from the main npm tags: drop prereleases
+    // (e.g. 5.0.0-alpha.1, 4.0.1-alpha.2 -- they only ship a Node/CJS build
+    // that a browser <script> can't execute), drop <3.x, and dedupe by minor.
+    if (v.includes('-')) {
+      return false;
+    }
     const majorMinor = v.match(/^\d+\.\d+/)?.[0] || '';
     if (Number(majorMinor.charAt(0)) < 3 || majorMinorSet.has(majorMinor)) {
       return false;
@@ -28,8 +34,13 @@ async function fetchVersions() {
     majorMinorSet.add(majorMinor);
     return true
   });
+  // Default to the npm `latest` dist-tag (stable, currently 4.x), never a prerelease.
+  const latest = data.tags?.latest;
+  const defaultVersion = (latest && publishedVersions.includes(latest))
+    ? latest
+    : publishedVersions[0];
   if (!store.activeVersion || store.activeVersion === '4.x' || !publishedVersions.includes(store.activeVersion)) {
-    activeVersion = publishedVersions[0];
+    activeVersion = defaultVersion;
     store.activeVersion = activeVersion;
   } else {
     activeVersion = store.activeVersion;
@@ -64,6 +75,11 @@ function fetchLess() {
       versionSelectFail = true;
       showTip();
     }
+    // Balance the loading toggle emitted at the start of fetchLess so a failed
+    // load never leaves the spinner stuck on (otherwise the whole page bricks),
+    // and re-render with whatever `window.less` is currently loaded.
+    emit("updateVue");
+    emit("upLoadingLessJS");
   };
 }
 
