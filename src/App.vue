@@ -6,19 +6,18 @@ import Editor from '@components/Editor.vue'
 import Layout from '@components/Layout.vue'
 import Select from '@components/Select.vue'
 import { Switch } from '@headlessui/vue'
-
-const mathOptions = ['always', 'parens-division', 'parens'].map(value => ({ value }))
+import { defaultStore, supportedOptions, renderOptions, type OptionStore } from './options'
 
 let input = $ref(LESS_DATA)
 let output = $ref<string | undefined>('')
 let errorMessage = $ref('')
 let hash = $ref('')
-let store: Less.Options & { activeVersion: string } = reactive({
+let store: OptionStore & { activeVersion: string } = reactive({
   activeVersion: '4.x',
-  math: 'parens-division',
-  strictUnits: false
+  ...defaultStore
 })
 let loadingLessJS = $ref(false)
+const options = $computed(() => supportedOptions(store.activeVersion))
 
 const serialize = () => {
   const newHash = '#' + utoa(JSON.stringify({
@@ -29,8 +28,7 @@ const serialize = () => {
 }
 
 const updateVue = () => {
-  const { math, strictUnits } = store
-  window.less.render(input, { math, strictUnits }, (error, result) => {
+  window.less.render(input, renderOptions(store, store.activeVersion), (error, result) => {
       if (error) {
         errorMessage = error.message
         output = ''
@@ -80,18 +78,21 @@ onMounted(() => {
     </template>
     <template #options>
       <h3>Options</h3>
-      <div class="option">
-        <span>Math mode</span>
-        <Select v-model="store.math" :options="mathOptions" />
-      </div>
-      <Switch
-        v-model="store.strictUnits"
-        class="option switch"
-        :class="{ on: store.strictUnits }"
-      >
-        <span>Strict units</span>
-        <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
-      </Switch>
+      <template v-for="o in options" :key="o.key">
+        <div v-if="o.type === 'select'" class="option">
+          <span>{{ o.label }}</span>
+          <Select v-model="store[o.key]" :options="o.values.map(value => ({ value }))" />
+        </div>
+        <Switch
+          v-else
+          v-model="store[o.key]"
+          class="option switch"
+          :class="{ on: store[o.key] }"
+        >
+          <span>{{ o.label }}</span>
+          <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        </Switch>
+      </template>
     </template>
     <template #preview>
       <editor v-model:value="output" readOnly />
