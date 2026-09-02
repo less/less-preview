@@ -22,7 +22,7 @@ export const defaultStore: OptionStore = {
   strictMath: false,
   math: 'parens-division',
   strictUnits: false,
-  unitMode: 'loose',
+  unitMode: 'preserve',
   collapseNesting: false,
   compress: false
 }
