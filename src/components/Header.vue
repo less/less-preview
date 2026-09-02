@@ -34,6 +34,14 @@ async function fetchVersions() {
     majorMinorSet.add(majorMinor);
     return true
   });
+  // Opt-in: surface the latest v5 alpha (npm `alpha` dist-tag). It loads the
+  // dev browser bundle (dist/less-browser-dev.js, window.less) — see fetchLess.
+  // Alphas published before that file existed will 404 and show the load tip.
+  // Kept out of the default so stable (`latest`) stays the landing version.
+  const alpha = data.tags?.alpha;
+  if (alpha && !publishedVersions.includes(alpha)) {
+    publishedVersions.unshift(alpha);
+  }
   // Default to the npm `latest` dist-tag (stable, currently 4.x), never a prerelease.
   const latest = data.tags?.latest;
   const defaultVersion = (latest && publishedVersions.includes(latest))
@@ -49,7 +57,12 @@ async function fetchVersions() {
 
 function fetchLess() {
   emit("upLoadingLessJS");
-  const url = baseVersionUrl + activeVersion;
+  // v5 alpha (any prerelease) ships only a Node/CJS default entry; a browser
+  // <script> must load the dedicated dev bundle instead. Stable 4.x loads its
+  // normal UMD entry. Both define window.less with the same render API.
+  const url = activeVersion.includes("-")
+    ? `${baseVersionUrl}${activeVersion}/dist/less-browser-dev.js`
+    : baseVersionUrl + activeVersion;
   let firstLoad = false;
   const scriptDom = document.getElementById("lessScript");
   if (scriptDom) {
@@ -138,11 +151,11 @@ init();
         -->
         <div class="version-select-click" @click.stop @click="toggle">
           <span class="active-version">
-            {{ activeVersion }}
+            {{ activeVersion }}{{ activeVersion.includes("-") ? " (experimental)" : "" }}
           </span>
           <ul v-if="expanded" class="versions">
             <li v-for="(item, index) in publishedVersions" :key="index">
-              <a @click="setLessVersion(item)">{{ item }}</a>
+              <a @click="setLessVersion(item)">{{ item }}{{ item.includes("-") ? " (experimental)" : "" }}</a>
             </li>
           </ul>
         </div>
