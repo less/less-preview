@@ -157,6 +157,10 @@ body {
     padding: 0;
     font: inherit;
     color: @muted;
+    text-align: left;
+    > span:first-child {
+      flex: 1;
+    }
     cursor: pointer;
     &:focus-visible .switch-track {
       outline: 2px solid @accent;
