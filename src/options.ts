@@ -8,7 +8,6 @@ export interface OptionStore {
   strictUnits: boolean
   unitMode: string
   collapseNesting: boolean
-  compress: boolean
 }
 
 type SwitchKey = { [K in keyof OptionStore]: OptionStore[K] extends boolean ? K : never }[keyof OptionStore]
@@ -24,19 +23,17 @@ export const defaultStore: OptionStore = {
   strictUnits: false,
   unitMode: 'preserve',
   collapseNesting: false,
-  compress: false
 }
 
 // Evidence: `math` replaced `strictMath` in less.js 76c10345 (first tag v3.7.0);
-// `unitMode` (strictUnits deprecated alias), `collapseNesting` and the rejection
-// of `compress` land in 5.0.0-alpha (packages/less/lib/options.js on `alpha`).
+// `unitMode` (strictUnits deprecated alias) and `collapseNesting` land in
+// 5.0.0-alpha (packages/less/lib/options.js on `alpha`).
 const all: OptionDescriptor[] = [
   { key: 'strictMath', label: 'Strict math', type: 'switch', max: '3.7.0' },
   { key: 'math', label: 'Math mode', type: 'select', values: ['always', 'parens-division', 'parens'], min: '3.7.0' },
   { key: 'strictUnits', label: 'Strict units', type: 'switch', max: '5.0.0' },
   { key: 'unitMode', label: 'Unit mode', type: 'select', values: ['loose', 'strict', 'preserve'], min: '5.0.0' },
   { key: 'collapseNesting', label: 'Collapse nesting', type: 'switch', min: '5.0.0' },
-  { key: 'compress', label: 'Minify (deprecated)', type: 'switch', max: '5.0.0' }
 ]
 
 // Numeric core only: "5.0.0-alpha.2" compares as 5.0.0; "4.x" as 4.0.0.
