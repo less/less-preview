@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import axios from "axios";
+import { atLeast } from "../options";
 import Select from "./Select.vue";
 const props = defineProps(["store"]);
 const { store } = props;
 
 const baseVersionUrl = "https://cdn.jsdelivr.net/npm/less@";
+// First Less alpha whose npm package includes dist/less-browser-dev.js.
+const MIN_BROWSER_BUNDLE_ALPHA = "5.0.0-alpha.3";
 let activeVersion = $ref("");
 let publishedVersions = $ref<string[]>();
 let showTipFlag = $ref(false);
@@ -40,10 +43,11 @@ async function fetchVersions() {
   });
   // Opt-in: surface the latest v5 alpha (npm `alpha` dist-tag). It loads the
   // dev browser bundle (dist/less-browser-dev.js, window.less) — see fetchLess.
-  // Alphas published before that file existed will 404 and show the load tip.
+  // Like the Less benchmark runner's per-file minimum versions, only offer an
+  // alpha that actually ships that file; older alphas would just 404.
   // Kept out of the default so stable (`latest`) stays the landing version.
   const alpha = data.tags?.alpha;
-  if (alpha && !publishedVersions.includes(alpha)) {
+  if (alpha && atLeast(alpha, MIN_BROWSER_BUNDLE_ALPHA) && !publishedVersions.includes(alpha)) {
     publishedVersions.unshift(alpha);
   }
   // Default to the npm `latest` dist-tag (stable, currently 4.x), never a prerelease.

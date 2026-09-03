@@ -40,10 +40,11 @@ const all: OptionDescriptor[] = [
 ]
 
 // Numeric core only: "5.0.0-alpha.2" compares as 5.0.0; "4.x" as 4.0.0.
+// (Option gates are keyed on the release line, so an alpha counts as its release.)
 const parse = (v: string) =>
   v.split('-')[0].split('.').map(p => Number(p) || 0)
 
-const compare = (a: string, b: string) => {
+export const compare = (a: string, b: string) => {
   const [x, y] = [parse(a), parse(b)]
   for (let i = 0; i < 3; i++) {
     if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) - (y[i] ?? 0)
@@ -60,3 +61,11 @@ export const supportedOptions = (version: string) =>
 // The only object that reaches less.render: valid keys for `version`, nothing else.
 export const renderOptions = (store: OptionStore, version: string) =>
   Object.fromEntries(supportedOptions(version).map(o => [o.key, store[o.key]]))
+
+// Prerelease-aware: same numeric core, then the prerelease number
+// ("5.0.0-alpha.3" >= "5.0.0-alpha.3"; "5.0.0-alpha.2" < "5.0.0-alpha.3").
+const prereleaseNumber = (v: string) => v.includes('-') ? Number(v.split('-')[1].split('.').pop()) || 0 : Infinity
+export const atLeast = (v: string, min: string) => {
+  const core = compare(v, min)
+  return core !== 0 ? core > 0 : prereleaseNumber(v) >= prereleaseNumber(min)
+}
