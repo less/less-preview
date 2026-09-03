@@ -36,7 +36,7 @@ const all: OptionDescriptor[] = [
   { key: 'strictUnits', label: 'Strict units', type: 'switch', max: '5.0.0' },
   { key: 'unitMode', label: 'Unit mode', type: 'select', values: ['loose', 'strict', 'preserve'], min: '5.0.0' },
   { key: 'collapseNesting', label: 'Collapse nesting', type: 'switch', min: '5.0.0' },
-  { key: 'compress', label: 'Minify (deprecated)', type: 'switch', max: '5.0.0' }
+  { key: 'compress', label: 'Minify', type: 'switch', max: '5.0.0' }
 ]
 
 // Numeric core only: "5.0.0-alpha.2" compares as 5.0.0; "4.x" as 4.0.0.
