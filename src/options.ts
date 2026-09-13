@@ -7,7 +7,7 @@ export interface OptionStore {
   math: string
   strictUnits: boolean
   unitMode: string
-  collapseNesting: boolean
+  collapseNesting: 'false' | 'native' | 'compact'
 }
 
 type SwitchKey = { [K in keyof OptionStore]: OptionStore[K] extends boolean ? K : never }[keyof OptionStore]
@@ -22,18 +22,21 @@ export const defaultStore: OptionStore = {
   math: 'parens-division',
   strictUnits: false,
   unitMode: 'preserve',
-  collapseNesting: false,
+  collapseNesting: 'false',
 }
 
 // Evidence: `math` replaced `strictMath` in less.js 76c10345 (first tag v3.7.0);
 // `unitMode` (strictUnits deprecated alias) and `collapseNesting` land in
-// 5.0.0-alpha (packages/less/lib/options.js on `alpha`).
+// 5.0.0-alpha (packages/less/lib/options.js on `alpha`). collapseNesting is an
+// enum: `false` keeps authored nesting (default); `native` is the CSS Nesting
+// desugaring (parent `:is()`, child list distributed, specificity-faithful);
+// `compact` also folds same-combinator descendant runs into one `:is()`.
 const all: OptionDescriptor[] = [
   { key: 'strictMath', label: 'Strict math', type: 'switch', max: '3.7.0' },
   { key: 'math', label: 'Math mode', type: 'select', values: ['always', 'parens-division', 'parens'], min: '3.7.0' },
   { key: 'strictUnits', label: 'Strict units', type: 'switch', max: '5.0.0' },
   { key: 'unitMode', label: 'Unit mode', type: 'select', values: ['loose', 'strict', 'preserve'], min: '5.0.0' },
-  { key: 'collapseNesting', label: 'Collapse nesting', type: 'switch', min: '5.0.0' },
+  { key: 'collapseNesting', label: 'Collapse nesting', type: 'select', values: ['false', 'native', 'compact'], min: '5.0.0' },
 ]
 
 // Numeric core only: "5.0.0-alpha.2" compares as 5.0.0; "4.x" as 4.0.0.
@@ -55,9 +58,16 @@ export const supportedOptions = (version: string) =>
     (!o.max || compare(version, o.max) < 0)
   )
 
+// Select values are strings; map the stringly-typed booleans back so an option
+// like `collapseNesting: 'false'` reaches less.render as an actual `false`
+// (the enum otherwise passes 'native'/'compact' straight through). Harmless for
+// the other selects — no math/unitMode value is 'true'/'false'.
+const normalize = (value: string | boolean) =>
+  value === 'false' ? false : value === 'true' ? true : value
+
 // The only object that reaches less.render: valid keys for `version`, nothing else.
 export const renderOptions = (store: OptionStore, version: string) =>
-  Object.fromEntries(supportedOptions(version).map(o => [o.key, store[o.key]]))
+  Object.fromEntries(supportedOptions(version).map(o => [o.key, normalize(store[o.key])]))
 
 // Prerelease-aware: same numeric core, then the prerelease number
 // ("5.0.0-alpha.3" >= "5.0.0-alpha.3"; "5.0.0-alpha.2" < "5.0.0-alpha.3").
