@@ -9,11 +9,19 @@ let input = $ref(LESS_DATA)
 let output = $ref<string | undefined>('')
 let errorMessage = $ref('')
 let hash = $ref('')
-let store: Less.Options & { activeVersion: string } = reactive({
+// `collapseNesting` is a Less v5 option (false | 'native' | 'compact'); 4.x has
+// no nesting to preserve, so the control only shows for a v5 alpha version.
+let store: Less.Options & {
+  activeVersion: string
+  collapseNesting: false | 'native' | 'compact'
+} = reactive({
   activeVersion: '4.x',
   math: 'parens-division',
-  strictUnits: false
+  strictUnits: false,
+  collapseNesting: false
 })
+
+const isV5 = () => store.activeVersion.includes('-')
 let loadingLessJS = $ref(false)
 
 const serialize = () => {
@@ -25,8 +33,15 @@ const serialize = () => {
 }
 
 const updateVue = () => {
-  const { math, strictUnits } = store
-  window.less.render(input, { math, strictUnits }, (error, result) => {
+  const { math, strictUnits, collapseNesting } = store
+  const options: Less.Options & { collapseNesting?: false | 'native' | 'compact' } =
+    { math, strictUnits }
+  // Only a v5 alpha understands collapseNesting; sending it to 4.x is a no-op
+  // at best, so scope it to v5 (and omit the default so 4.x behaves unchanged).
+  if (isV5()) {
+    options.collapseNesting = collapseNesting
+  }
+  window.less.render(input, options, (error, result) => {
       if (error) {
         errorMessage = error.message
         output = ''
@@ -89,7 +104,16 @@ onMounted(() => {
         <input type="checkbox" v-model="store.strictUnits" />
         <span>Strict units</span>
       </label>
-      
+
+      <div v-if="isV5()">
+        <label>Collapse nesting <span class="badge">v5</span></label>
+        <select v-model="store.collapseNesting">
+          <option :value="false">false — keep authored nesting (default)</option>
+          <option value="native">native — distribute (specificity-faithful)</option>
+          <option value="compact">compact — fold runs into :is()</option>
+        </select>
+      </div>
+
     </template>
     <template #preview>
       <editor v-model:value="output" readOnly />
@@ -128,6 +152,19 @@ body {
   100% {
     opacity: 1;
   }
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.7em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  border-radius: 3px;
+  color: #fff;
+  background: hsl(152, 47%, 45%);
+  vertical-align: middle;
 }
 
 .error {
